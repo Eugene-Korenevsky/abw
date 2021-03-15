@@ -22,8 +22,7 @@ public class CarAdPagByCarBrandDateAsc implements CarAdPagServiceWithOneParam<St
 
     @Override
     public List<Ad> getPaginationResult(String param, int page, int size) {
-        Pageable sortedByDate = PageRequest.of(page, appProperties.getPageSize(),
-                Sort.by("publicationDate").ascending());
+        Pageable sortedByDate = PageRequest.of(page, size,Sort.by("publicationDate").ascending());
         return new ArrayList<>(carAdPaginationRepository
                 .findByCarBrand_NameAndSold(param, false, sortedByDate));
     }
