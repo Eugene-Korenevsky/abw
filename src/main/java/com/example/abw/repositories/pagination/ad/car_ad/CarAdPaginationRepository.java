@@ -12,4 +12,6 @@ public interface CarAdPaginationRepository extends PagingAndSortingRepository<Ca
     List<CarAd> readAllBySold(boolean sold, Pageable pageable);
 
     public List<CarAd> findByCarBrand_CarBrandName_NameAndSold(String name,boolean sold, Pageable pageable);
+
+    public List<CarAd> findByCarBrand_NameAndSold(String name,boolean sold, Pageable pageable);
 }
