@@ -11,7 +11,9 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -38,6 +40,7 @@ public class CarAd implements Serializable, Ad {
     private User user;
 
     @NotNull
+    @Min(value = 1, message = "min price value must be 1")
     private long price;
 
     private Timestamp publicationDate;
@@ -47,6 +50,7 @@ public class CarAd implements Serializable, Ad {
 
     @Column(columnDefinition = "boolean default false")
     private boolean sold;
+
 
     @Column(columnDefinition = "varchar(1000)")
     private String descriptions;

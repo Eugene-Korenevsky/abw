@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -21,6 +22,7 @@ public class CarBrandName implements Serializable {
     private long id;
 
     @NotNull
+    @Size(min = 2, message = "carBrandName min size must be 2")
     private String name;
 
 

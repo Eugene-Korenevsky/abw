@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
@@ -20,5 +21,6 @@ public class Role implements Serializable {
     private long id;
 
     @NotNull
+    @Size(min = 2, message = "roleName min size must be 2")
     private String role;
 }

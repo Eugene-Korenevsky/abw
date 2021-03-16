@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
@@ -19,6 +20,7 @@ public class User implements Serializable {
 
     @NotNull
     @Column(name = "name")
+    @Size(min = 2, message = "name min size must be 2")
     private String name;
 
     @NotNull
@@ -26,9 +28,13 @@ public class User implements Serializable {
     private String email;
 
     @NotNull
+    @Pattern(regexp = "^\\\\+?[0-9\\\\-\\\\s]*$", message = "wrong phoneNumber")
     private String phoneNumber;
 
     @NotNull
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{4,19}$",
+            message = "password must have more than 3 characters but less than 20." +
+                    "Must contain only alphanumeric characters.Must contain letters and numbers.")
     private String password;
 
     @NotNull

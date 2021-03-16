@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
@@ -19,6 +20,7 @@ public class CarBrand implements Serializable, SellItem {
     private long id;
 
     @NotNull
+    @Size(min = 2, message = "carBrand min size must be 2")
     private String name;
 
     @NotNull
