@@ -21,16 +21,16 @@ public class CarAdPagByCarBrandDateDesc implements CarAdPagServiceWithOneParam<S
     private CarAdPaginationRepository carAdPaginationRepository;
 
     @Override
-    public List<Ad> getPaginationResult(String param, int page, int size) {
+    public List<Ad> getPaginationResult(String carBrand, int page, int size) {
         Pageable sortedByDate = PageRequest.of(page, size, Sort.by("publicationDate").descending());
         return new ArrayList<>(carAdPaginationRepository
-                .findByCarBrand_NameAndSold(param, false, sortedByDate));
+                .findByCarBrand_NameAndSold(carBrand, false, sortedByDate));
     }
 
     @Override
-    public List<Ad> getPaginationResultByDefault(String param, int page) {
+    public List<Ad> getPaginationResultByDefault(String carBrand, int page) {
         Pageable sortedByDate = PageRequest.of(page, appProperties.getPageSize(), Sort.by("publicationDate").descending());
         return new ArrayList<>(carAdPaginationRepository
-                .findByCarBrand_NameAndSold(param, false, sortedByDate));
+                .findByCarBrand_NameAndSold(carBrand, false, sortedByDate));
     }
 }
