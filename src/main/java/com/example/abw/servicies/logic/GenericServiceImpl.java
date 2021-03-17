@@ -1,7 +1,10 @@
 package com.example.abw.servicies.logic;
 
+import com.example.abw.entities.exception.ValidationError;
 import com.example.abw.servicies.GenericService;
+import com.example.abw.servicies.exceptions.ResourceNotFoundException;
 import com.example.abw.validator.MyValidator;
+import com.example.abw.validator.exception.ValidationException;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,46 +25,43 @@ public abstract class GenericServiceImpl<T> implements GenericService<T> {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public T findById(Long id) {
+    public T findById(Long id) throws ResourceNotFoundException, IllegalArgumentException {
         if (id != null) {
             Optional<T> optionalT = crudRepository.findById(id);
             if (optionalT.isPresent()) return optionalT.get();
-            else return null; //throw new ResourceNotFoundException("");
-        } else return null; //else throw new ValidationException("long must not be null");
+            else throw new ResourceNotFoundException("entity not found");
+        } else throw new IllegalArgumentException("long must not be null");
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Long id) throws IllegalArgumentException {
         if (id != null) {
             crudRepository.deleteById(id);
-        }  //else throw new ValidationException("long must not be null");
+        } else throw new IllegalArgumentException("long must not be null");
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public T create(T entity) {
+    public T create(T entity) throws ValidationException {
         if (entity != null) {
             Validator validator = MyValidator.getValidator();
             Set<ConstraintViolation<T>> violations = validator.validate(entity);
             if (violations.size() < 1) {
                 return crudRepository.save(entity);
             } else {
-                //  ValidationError validationError = new ValidationError();
-                ArrayList<String> errors = new ArrayList<>();
+                ValidationError validationError = new ValidationError();
                 for (ConstraintViolation<T> violation : violations) {
-                    errors.add(violation.getMessage());
+                    validationError.addError(violation.getMessage());
                 }
-                // validationError.setErrors(errors);
-                return null;  // throw new ValidationException("entity validation error", validationError);
+                throw new ValidationException("ValidationException", validationError);
             }
-        }
-        return null; //else throw new ValidationException("entity must not be null");
+        } else throw new ValidationException("entity must not be null");
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public T update(T entity, Long id) {
+    public T update(T entity, Long id) throws ValidationException, ResourceNotFoundException {
         if (entity != null) {
             if (id != null) {
                 if (crudRepository.existsById(id)) {
@@ -70,18 +70,15 @@ public abstract class GenericServiceImpl<T> implements GenericService<T> {
                     if (violations.size() < 1) {
                         return crudRepository.save(entity);
                     } else {
-                        // ValidationError validationError = new ValidationError();
-                        ArrayList<String> errors = new ArrayList<>();
+                        ValidationError validationError = new ValidationError();
                         for (ConstraintViolation<T> violation : violations) {
-                            errors.add(violation.getMessage());
+                            validationError.addError(violation.getMessage());
                         }
-                        //  validationError.setErrors(errors);
-                        // throw new ValidationException("entity validation error", validationError);
+                        throw new ValidationException("entity validation error", validationError);
                     }
-                } //else throw new ResourceNotFoundException("resource not exist");
-            } //else throw new ValidationException("long must not be null");
-        } //else throw new ValidationException("entity must not be null");
-        return null;
+                } else throw new ResourceNotFoundException("resource not exist");
+            } else throw new IllegalArgumentException("long must not be null");
+        } else throw new IllegalArgumentException("entity must not be null");
     }
 
     @Override

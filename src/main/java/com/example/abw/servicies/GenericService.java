@@ -1,15 +1,18 @@
 package com.example.abw.servicies;
 
+import com.example.abw.servicies.exceptions.ResourceNotFoundException;
+import com.example.abw.validator.exception.ValidationException;
+
 import java.util.List;
 
 public interface GenericService<T> {
-    public T findById(Long id);
+    public T findById(Long id) throws ResourceNotFoundException,IllegalArgumentException;
 
-    public void deleteById(Long id);
+    public void deleteById(Long id) throws IllegalArgumentException;
 
-    public T create(T entity);
+    public T create(T entity) throws ValidationException;
 
-    public T update(T entity, Long id);
+    public T update(T entity, Long id)throws ValidationException,ResourceNotFoundException;
 
     public List<T> findAll();
 
