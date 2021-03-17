@@ -20,7 +20,7 @@ public class Role implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotNull
+    @NotNull(message = "role name must not be null")
     @Size(min = 2, message = "roleName min size must be 2")
     private String role;
 }

@@ -6,16 +6,16 @@ import com.example.abw.entities.ad.image.car.CarImage;
 import com.example.abw.entities.sell_item.SellItem;
 import com.example.abw.entities.sell_item.car.CarBrand;
 import com.example.abw.entities.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Set;
 
@@ -23,26 +23,27 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = "carImages")
 @Data
 @Table(name = "car_ad")
-public class CarAd implements Serializable, Ad {
+public class CarAd implements Serializable,Ad {
     @Id
     @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotNull
+    @NotNull(message = "carAd carBrand must not be null")
     @ManyToOne
     @JoinColumn(name = "car_brand_id", referencedColumnName = "id")
     private CarBrand carBrand;
 
-    @NotNull
+    @NotNull(message = "carAd user must not be null")
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @NotNull
+    @NotNull(message = "carAd price must not be null")
     @Min(value = 1, message = "min price value must be 1")
     private long price;
 
+    @NotNull(message = "carAd publicationDate must not be null")
     private Timestamp publicationDate;
 
     private Timestamp endPublicationDate;
@@ -51,7 +52,7 @@ public class CarAd implements Serializable, Ad {
     @Column(columnDefinition = "boolean default false")
     private boolean sold;
 
-
+    @Max(value = 1, message = "max symbols in description is 1000")
     @Column(columnDefinition = "varchar(1000)")
     private String descriptions;
 

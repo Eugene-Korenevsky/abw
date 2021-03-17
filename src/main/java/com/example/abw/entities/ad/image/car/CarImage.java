@@ -19,11 +19,11 @@ public class CarImage implements Serializable, Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotNull
+    @NotNull(message = "Image resource must not be null")
     @Column(columnDefinition = "text")
     private String image;
 
-    @NotNull
+    @NotNull(message = "Image carAd must not be null")
     @ManyToOne
     @JoinColumn(name = "car_ad_id", referencedColumnName = "id")
     private CarAd carAd;

@@ -19,11 +19,11 @@ public class CarBrand implements Serializable, SellItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotNull
+    @NotNull(message = "carBrand name must not be null")
     @Size(min = 2, message = "carBrand min size must be 2")
     private String name;
 
-    @NotNull
+    @NotNull(message = "carBrand carBrandName must not be null")
     @ManyToOne
     @JoinColumn(name = "car_brand_name_id", referencedColumnName = "id")
     private CarBrandName carBrandName;

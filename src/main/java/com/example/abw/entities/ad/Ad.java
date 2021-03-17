@@ -6,10 +6,11 @@ import com.example.abw.entities.ad.image.car.CarImage;
 import com.example.abw.entities.sell_item.SellItem;
 import com.example.abw.entities.user.User;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Set;
 
-public interface Ad {
+public interface Ad  {
     public long getId();
 
     public User getUser();
