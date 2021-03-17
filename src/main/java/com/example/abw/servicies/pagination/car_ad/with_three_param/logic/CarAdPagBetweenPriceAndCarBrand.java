@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CarAdPagBetweenPriceAndCarBrandNameDateAsc implements
+public class CarAdPagBetweenPriceAndCarBrand implements
         CarAdPagServiceWithThreeParam<Long, Long, String> {
     @Autowired
     private AppProperties appProperties;
@@ -23,7 +23,7 @@ public class CarAdPagBetweenPriceAndCarBrandNameDateAsc implements
     private CarAdPaginationRepository carAdPaginationRepository;
 
     @Override
-    public List<Ad> getPaginationResult(Long start, Long end, String carBrandName,
+    public List<Ad> getPaginationResult(Long start, Long end, String carBrand,
                                         int page, int size, String filter, SortKind sortKind) {
         Pageable pageable;
         if (sortKind == SortKind.ASC) {
@@ -32,13 +32,12 @@ public class CarAdPagBetweenPriceAndCarBrandNameDateAsc implements
             pageable = PageRequest.of(page, size, Sort.by(filter).descending());
         }
         return new ArrayList<>(carAdPaginationRepository
-                .readAllByPriceBetweenAndSoldAndCarBrand_CarBrandName_Name(start, end, false,
-                        carBrandName, pageable));
+                .readAllByPriceBetweenAndSoldAndCarBrand_Name(start, end, false, carBrand, pageable));
     }
 
     @Override
-    public List<Ad> getPaginationResultByDefault(Long start, Long end, String carBrandName,
-                                                 int page, String filter, SortKind sortKind) {
+    public List<Ad> getPaginationResultByDefault(Long start, Long end,
+                                                 String carBrand, int page, String filter, SortKind sortKind) {
         Pageable pageable;
         if (sortKind == SortKind.ASC) {
             pageable = PageRequest.of(page, appProperties.getPageSize(), Sort.by(filter).ascending());
@@ -46,7 +45,6 @@ public class CarAdPagBetweenPriceAndCarBrandNameDateAsc implements
             pageable = PageRequest.of(page, appProperties.getPageSize(), Sort.by(filter).descending());
         }
         return new ArrayList<>(carAdPaginationRepository
-                .readAllByPriceBetweenAndSoldAndCarBrand_CarBrandName_Name(start, end,
-                        false, carBrandName, pageable));
+                .readAllByPriceBetweenAndSoldAndCarBrand_Name(start, end, false, carBrand, pageable));
     }
 }
