@@ -45,7 +45,7 @@ public class CarAdController {
             CarAd carAd = carAdServiceImpl.findById(id);
             return new ResponseEntity<>(carAd, HttpStatus.OK);
         } catch (ResourceNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 }
