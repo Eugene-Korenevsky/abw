@@ -21,7 +21,7 @@ public class ByCarBrandController {
     @Autowired
     private AppProperties appProperties;
     @Autowired
-    private ResponseServiceWithOneParam responseServiceWithOneParamImpl;
+    private ResponseServiceWithOneParam responseServiceWithOneParamString;
 
     @GetMapping("/carBrand")
     public ResponseEntity<?> getAllByCarBrand(@RequestParam(value = "page") Integer page,
@@ -31,17 +31,17 @@ public class ByCarBrandController {
                                               @RequestParam(value = "carBrand") String carBrand) {
         if (type != null) {
             if (type.equals("asc")) {
-                return responseServiceWithOneParamImpl.getResponseEntity(
+                return responseServiceWithOneParamString.getResponseEntity(
                         filter, size, carBrand, page, SortKind.ASC, carAdPagByCarBrand, appProperties);
             } else if (type.equals("desc")) {
-                return responseServiceWithOneParamImpl.getResponseEntity(
+                return responseServiceWithOneParamString.getResponseEntity(
                         filter, size, carBrand, page, SortKind.DESC, carAdPagByCarBrand, appProperties);
             } else {
-                return responseServiceWithOneParamImpl.getResponseEntity(
+                return responseServiceWithOneParamString.getResponseEntity(
                         filter, size, carBrand, page, SortKind.DESC, carAdPagByCarBrand, appProperties);
             }
         } else {
-            return responseServiceWithOneParamImpl.getResponseEntity(
+            return responseServiceWithOneParamString.getResponseEntity(
                     filter, size, carBrand, page, SortKind.DESC, carAdPagByCarBrand, appProperties);
         }
     }
@@ -54,17 +54,17 @@ public class ByCarBrandController {
                                                   @RequestParam(value = "carBrandName") String carBrandName) {
         if (type != null) {
             if (type.equals("asc")) {
-                return responseServiceWithOneParamImpl.getResponseEntity(
+                return responseServiceWithOneParamString.getResponseEntity(
                         filter, size, carBrandName, page, SortKind.ASC, carAdPagByCarBrandName, appProperties);
             } else if (type.equals("desc")) {
-                return responseServiceWithOneParamImpl.getResponseEntity(
+                return responseServiceWithOneParamString.getResponseEntity(
                         filter, size, carBrandName, page, SortKind.DESC, carAdPagByCarBrandName, appProperties);
             } else {
-                return responseServiceWithOneParamImpl.getResponseEntity(
+                return responseServiceWithOneParamString.getResponseEntity(
                         filter, size, carBrandName, page, SortKind.DESC, carAdPagByCarBrandName, appProperties);
             }
         } else {
-            return responseServiceWithOneParamImpl.getResponseEntity(
+            return responseServiceWithOneParamString.getResponseEntity(
                     filter, size, carBrandName, page, SortKind.DESC, carAdPagByCarBrandName, appProperties);
         }
     }
