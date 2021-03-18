@@ -24,6 +24,8 @@ public class ByPriceController {
     @Autowired
     private CarAdPagServiceWithThreeParam carAdPagBetweenPriceAndCarBrand;
     @Autowired
+    private CarAdPagServiceWithThreeParam carAdPagBetweenPriceAndCarBrandName;
+    @Autowired
     private ResponseServiceWithTwoParam responseServiceByPrice;
     @Autowired
     private ResponseServiceWithThreeParam responseServiceByPriceAndString;
@@ -78,6 +80,35 @@ public class ByPriceController {
             return responseServiceByPriceAndString.getResponseEntity(
                     filter, size, startPrice, endPrice, carBrand, page,
                     SortKind.DESC, carAdPagBetweenPriceAndCarBrand, appProperties);
+        }
+    }
+
+    @GetMapping("/carBrandName")
+    public ResponseEntity<?> getAllByPriceAndCarBrandName(@RequestParam(value = "page") Integer page,
+                                                          @RequestParam(value = "size", required = false) Integer size,
+                                                          @RequestParam(value = "filter", required = false) String filter,
+                                                          @RequestParam(value = "type", required = false) String type,
+                                                          @RequestParam(value = "startPrice") Long startPrice,
+                                                          @RequestParam(value = "endPrice") Long endPrice,
+                                                          @RequestParam(value = "carBrandName") String carBrandName) {
+        if (type != null) {
+            if (type.equals("asc")) {
+                return responseServiceByPriceAndString.getResponseEntity(
+                        filter, size, startPrice, endPrice, carBrandName, page,
+                        SortKind.ASC, carAdPagBetweenPriceAndCarBrandName, appProperties);
+            } else if (type.equals("desc")) {
+                return responseServiceByPriceAndString.getResponseEntity(
+                        filter, size, startPrice, endPrice, carBrandName, page,
+                        SortKind.DESC, carAdPagBetweenPriceAndCarBrandName, appProperties);
+            } else {
+                return responseServiceByPriceAndString.getResponseEntity(
+                        filter, size, startPrice, endPrice, carBrandName, page,
+                        SortKind.DESC, carAdPagBetweenPriceAndCarBrandName, appProperties);
+            }
+        } else {
+            return responseServiceByPriceAndString.getResponseEntity(
+                    filter, size, startPrice, endPrice, carBrandName, page,
+                    SortKind.DESC, carAdPagBetweenPriceAndCarBrandName, appProperties);
         }
     }
 }
