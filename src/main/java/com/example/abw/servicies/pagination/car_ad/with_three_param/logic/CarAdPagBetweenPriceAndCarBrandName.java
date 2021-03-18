@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CarAdPagBetweenPriceAndCarBrandNameDateAsc implements
+public class CarAdPagBetweenPriceAndCarBrandName implements
         CarAdPagServiceWithThreeParam<Long, Long, String> {
     @Autowired
     private AppProperties appProperties;
