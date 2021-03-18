@@ -11,4 +11,5 @@ import org.springframework.stereotype.Component;
 @PropertySource("classpath:global.properties")
 public class AppProperties {
     private int pageSize;
+    private String DefaultFilter;
 }
