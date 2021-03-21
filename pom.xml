@@ -51,10 +51,10 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <!--<dependency>
+        <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-        </dependency>-->
+        </dependency>
 
         <dependency>
             <groupId>io.springfox</groupId>
