@@ -6,7 +6,6 @@ import com.example.abw.entities.ad.image.car.CarImage;
 import com.example.abw.entities.sell_item.SellItem;
 import com.example.abw.entities.sell_item.car.CarBrand;
 import com.example.abw.entities.user.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -52,13 +51,13 @@ public class CarAd implements Serializable,Ad {
     @Column(columnDefinition = "boolean default false")
     private boolean sold;
 
-    @Max(value = 1, message = "max symbols in description is 1000")
+    @Max(value = 1000, message = "max symbols in description is 1000")
     @Column(columnDefinition = "varchar(1000)")
     private String descriptions;
 
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "carAd")//, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "carAd", fetch = FetchType.EAGER)// why I decided to use FetchType.Eager please read read.me
     private Set<CarImage> carImages;
 
     @Override
