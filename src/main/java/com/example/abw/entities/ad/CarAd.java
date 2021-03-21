@@ -11,9 +11,9 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Set;
@@ -22,7 +22,7 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = "carImages")
 @Data
 @Table(name = "car_ad")
-public class CarAd implements Serializable,Ad {
+public class CarAd implements Serializable, Ad {
     @Id
     @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,7 +51,7 @@ public class CarAd implements Serializable,Ad {
     @Column(columnDefinition = "boolean default false")
     private boolean sold;
 
-    @Max(value = 1000, message = "max symbols in description is 1000")
+    @Size(max = 1000, message = "max symbols in description is 1000")
     @Column(columnDefinition = "varchar(1000)")
     private String descriptions;
 
