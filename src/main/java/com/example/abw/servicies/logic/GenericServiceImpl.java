@@ -29,7 +29,7 @@ public abstract class GenericServiceImpl<T> implements GenericService<T> {
         if (id != null) {
             Optional<T> optionalT = crudRepository.findById(id);
             if (optionalT.isPresent()) return optionalT.get();
-            else throw new ResourceNotFoundException("entity not found");
+            else throw new ResourceNotFoundException("resource not found");
         } else throw new IllegalArgumentException("long must not be null");
     }
 
