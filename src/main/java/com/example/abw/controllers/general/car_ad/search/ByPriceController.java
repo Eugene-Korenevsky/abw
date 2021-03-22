@@ -26,9 +26,9 @@ public class ByPriceController {
     @Autowired
     private CarAdPagServiceWithThreeParam carAdPagBetweenPriceAndCarBrandName;
     @Autowired
-    private ResponseServiceWithTwoParam responseServiceByPrice;
+    private ResponseServiceWithTwoParam responseServiceByPriceUser;
     @Autowired
-    private ResponseServiceWithThreeParam responseServiceByPriceAndString;
+    private ResponseServiceWithThreeParam responseServiceByPriceAndStringUser;
 
     @GetMapping
     public ResponseEntity<?> getAllByPrice(@RequestParam(value = "page") Integer page,
@@ -39,17 +39,17 @@ public class ByPriceController {
                                            @RequestParam(value = "endPrice") Long endPrice) {
         if (type != null) {
             if (type.equals("asc")) {
-                return responseServiceByPrice.getResponseEntity(
+                return responseServiceByPriceUser.getResponseEntity(
                         filter, size, startPrice, endPrice, page, SortKind.ASC, carAdPagBetweenPrice, appProperties);
             } else if (type.equals("desc")) {
-                return responseServiceByPrice.getResponseEntity(
+                return responseServiceByPriceUser.getResponseEntity(
                         filter, size, startPrice, endPrice, page, SortKind.DESC, carAdPagBetweenPrice, appProperties);
             } else {
-                return responseServiceByPrice.getResponseEntity(
+                return responseServiceByPriceUser.getResponseEntity(
                         filter, size, startPrice, endPrice, page, SortKind.DESC, carAdPagBetweenPrice, appProperties);
             }
         } else {
-            return responseServiceByPrice.getResponseEntity(
+            return responseServiceByPriceUser.getResponseEntity(
                     filter, size, startPrice, endPrice, page, SortKind.DESC, carAdPagBetweenPrice, appProperties);
         }
     }
@@ -64,20 +64,20 @@ public class ByPriceController {
                                                       @RequestParam(value = "carBrand") String carBrand) {
         if (type != null) {
             if (type.equals("asc")) {
-                return responseServiceByPriceAndString.getResponseEntity(
+                return responseServiceByPriceAndStringUser.getResponseEntity(
                         filter, size, startPrice, endPrice, carBrand, page,
                         SortKind.ASC, carAdPagBetweenPriceAndCarBrand, appProperties);
             } else if (type.equals("desc")) {
-                return responseServiceByPriceAndString.getResponseEntity(
+                return responseServiceByPriceAndStringUser.getResponseEntity(
                         filter, size, startPrice, endPrice, carBrand, page,
                         SortKind.DESC, carAdPagBetweenPriceAndCarBrand, appProperties);
             } else {
-                return responseServiceByPriceAndString.getResponseEntity(
+                return responseServiceByPriceAndStringUser.getResponseEntity(
                         filter, size, startPrice, endPrice, carBrand, page,
                         SortKind.DESC, carAdPagBetweenPriceAndCarBrand, appProperties);
             }
         } else {
-            return responseServiceByPriceAndString.getResponseEntity(
+            return responseServiceByPriceAndStringUser.getResponseEntity(
                     filter, size, startPrice, endPrice, carBrand, page,
                     SortKind.DESC, carAdPagBetweenPriceAndCarBrand, appProperties);
         }
@@ -93,20 +93,20 @@ public class ByPriceController {
                                                           @RequestParam(value = "carBrandName") String carBrandName) {
         if (type != null) {
             if (type.equals("asc")) {
-                return responseServiceByPriceAndString.getResponseEntity(
+                return responseServiceByPriceAndStringUser.getResponseEntity(
                         filter, size, startPrice, endPrice, carBrandName, page,
                         SortKind.ASC, carAdPagBetweenPriceAndCarBrandName, appProperties);
             } else if (type.equals("desc")) {
-                return responseServiceByPriceAndString.getResponseEntity(
+                return responseServiceByPriceAndStringUser.getResponseEntity(
                         filter, size, startPrice, endPrice, carBrandName, page,
                         SortKind.DESC, carAdPagBetweenPriceAndCarBrandName, appProperties);
             } else {
-                return responseServiceByPriceAndString.getResponseEntity(
+                return responseServiceByPriceAndStringUser.getResponseEntity(
                         filter, size, startPrice, endPrice, carBrandName, page,
                         SortKind.DESC, carAdPagBetweenPriceAndCarBrandName, appProperties);
             }
         } else {
-            return responseServiceByPriceAndString.getResponseEntity(
+            return responseServiceByPriceAndStringUser.getResponseEntity(
                     filter, size, startPrice, endPrice, carBrandName, page,
                     SortKind.DESC, carAdPagBetweenPriceAndCarBrandName, appProperties);
         }
