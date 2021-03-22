@@ -18,27 +18,11 @@ import org.mockito.MockitoAnnotations;
 
 
 public class UserServiceTest {
-
-    // @Mock
-    // AppProperties appProperties;
-    // @Mock
-    // CarAdPaginationRepository carAdPaginationRepository;
-    //  @Mock
-    // CarAdRepository carAdRepository;
     @Mock
     UserRepository userRepository;
-    // @Mock
-    // CarBrandRepository carBrandRepository;
-
-
-    //  @InjectMocks
-    // CarAdPagBetweenPrice carAdPagBetweenPrice = new CarAdPagBetweenPrice();
 
     @InjectMocks
     UserService userService = new UserServiceImpl(userRepository);
-    // CarBrandService carBrandService = new CarBrandServiceImpl(carBrandRepository);
-
-//    CarAdService carAdService = new CarAdServiceImpl(carAdRepository, userService, carBrandService);
 
     @Before
     public void init() {
@@ -56,12 +40,6 @@ public class UserServiceTest {
         when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(user));
         User emp = userService.findById(1L);
         assertEquals("admin", emp.getPassword());
-      /*  List<Ad> ads = carAdPagBetweenPrice.getPaginationResult(300000L, 500000L, 0, 30,
-                "price", SortKind.DESC, false);
-        for (Ad ad : ads) {
-            assertTrue(ad.isSold());
-            System.out.println(ad.getPublicationDate());
-        }*/
     }
 
 
