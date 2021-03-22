@@ -1,4 +1,4 @@
-package com.example.abw.servicies.response.car_ad.search.logic;
+package com.example.abw.servicies.response.car_ad.search.logic.three_params;
 
 import com.example.abw.servicies.response.car_ad.search.ResponseServiceWithThreeParam;
 import org.springframework.stereotype.Service;
