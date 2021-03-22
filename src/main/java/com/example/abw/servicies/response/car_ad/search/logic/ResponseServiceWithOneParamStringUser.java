@@ -4,6 +4,9 @@ import com.example.abw.servicies.response.car_ad.search.ResponseServiceWithOnePa
 import org.springframework.stereotype.Service;
 
 @Service
-public class ResponseServiceWithOneParamString extends ResponseServiceWithOneParam<String> {
-
+public class ResponseServiceWithOneParamStringUser extends ResponseServiceWithOneParam<String> {
+    @Override
+    public boolean isAdmin() {
+        return false;
+    }
 }

@@ -4,5 +4,9 @@ import com.example.abw.servicies.response.car_ad.search.ResponseServiceWithTwoPa
 import org.springframework.stereotype.Service;
 
 @Service
-public class ResponseServiceByPrice extends ResponseServiceWithTwoParam<Long, Long> {
+public class ResponseServiceByPriceUser extends ResponseServiceWithTwoParam<Long, Long> {
+    @Override
+    public boolean isAdmin() {
+        return false;
+    }
 }
