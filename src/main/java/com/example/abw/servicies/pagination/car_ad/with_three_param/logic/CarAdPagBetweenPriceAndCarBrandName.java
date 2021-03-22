@@ -24,28 +24,32 @@ public class CarAdPagBetweenPriceAndCarBrandName implements
 
     @Override
     public List<Ad> getPaginationResult(Long start, Long end, String carBrandName,
-                                        int page, int size, String filter, SortKind sortKind) {
+                                        int page, int size, String filter, SortKind sortKind, boolean admin) {
         Pageable pageable;
         if (sortKind == SortKind.ASC) {
             pageable = PageRequest.of(page, size, Sort.by(filter).ascending());
         } else {
             pageable = PageRequest.of(page, size, Sort.by(filter).descending());
         }
-        return new ArrayList<>(carAdPaginationRepository
+        if (admin) return new ArrayList<>(carAdPaginationRepository
+                .readAllByPriceBetweenAndCarBrand_CarBrandName_Name(start, end, carBrandName, pageable));
+        else return new ArrayList<>(carAdPaginationRepository
                 .readAllByPriceBetweenAndSoldAndCarBrand_CarBrandName_Name(start, end, false,
                         carBrandName, pageable));
     }
 
     @Override
     public List<Ad> getPaginationResultByDefault(Long start, Long end, String carBrandName,
-                                                 int page, String filter, SortKind sortKind) {
+                                                 int page, String filter, SortKind sortKind, boolean admin) {
         Pageable pageable;
         if (sortKind == SortKind.ASC) {
             pageable = PageRequest.of(page, appProperties.getPageSize(), Sort.by(filter).ascending());
         } else {
             pageable = PageRequest.of(page, appProperties.getPageSize(), Sort.by(filter).descending());
         }
-        return new ArrayList<>(carAdPaginationRepository
+        if (admin) return new ArrayList<>(carAdPaginationRepository
+                .readAllByPriceBetweenAndCarBrand_CarBrandName_Name(start, end, carBrandName, pageable));
+        else return new ArrayList<>(carAdPaginationRepository
                 .readAllByPriceBetweenAndSoldAndCarBrand_CarBrandName_Name(start, end,
                         false, carBrandName, pageable));
     }

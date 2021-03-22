@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface CarAdPagServiceWithThreeParam<T, T1, T2> {
     public List<Ad> getPaginationResult(T param, T1 param1, T2 param2, int page, int size,
-                                        String filter, SortKind sortKind);
+                                        String filter, SortKind sortKind,boolean admin);
 
     public List<Ad> getPaginationResultByDefault(T param, T1 param1, T2 param2, int page,
-                                                 String filter, SortKind sortKind);
+                                                 String filter, SortKind sortKind,boolean admin);
 }

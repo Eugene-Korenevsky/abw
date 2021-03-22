@@ -22,26 +22,30 @@ public class CarAdPagBetweenPrice implements CarAdPagServiceWithTwoParam<Long, L
     private CarAdPaginationRepository carAdPaginationRepository;
 
     @Override
-    public List<Ad> getPaginationResult(Long start, Long end, int page, int size, String filter, SortKind sortKind) {
+    public List<Ad> getPaginationResult(Long start, Long end, int page,
+                                        int size, String filter, SortKind sortKind, boolean isAdmin) {
         Pageable pageable;
         if (sortKind == SortKind.ASC) {
             pageable = PageRequest.of(page, size, Sort.by(filter).ascending());
         } else {
             pageable = PageRequest.of(page, size, Sort.by(filter).descending());
         }
-        return new ArrayList<>(carAdPaginationRepository
+        if (isAdmin) return new ArrayList<>(carAdPaginationRepository.readAllByPriceBetween(start, end, pageable));
+        else return new ArrayList<>(carAdPaginationRepository
                 .readAllByPriceBetweenAndSold(start, end, false, pageable));
     }
 
     @Override
-    public List<Ad> getPaginationResultByDefault(Long start, Long end, int page, String filter, SortKind sortKind) {
+    public List<Ad> getPaginationResultByDefault(Long start, Long end, int page,
+                                                 String filter, SortKind sortKind, boolean isAdmin) {
         Pageable pageable;
         if (sortKind == SortKind.ASC) {
             pageable = PageRequest.of(page, appProperties.getPageSize(), Sort.by(filter).ascending());
         } else {
             pageable = PageRequest.of(page, appProperties.getPageSize(), Sort.by(filter).descending());
         }
-        return new ArrayList<>(carAdPaginationRepository
-                .readAllByPriceBetweenAndSold(start, end, false, pageable));
+        if (isAdmin) return new ArrayList<>(carAdPaginationRepository.readAllByPriceBetween(start, end, pageable));
+        else return new ArrayList<>(carAdPaginationRepository.
+                readAllByPriceBetweenAndSold(start, end, false, pageable));
     }
 }

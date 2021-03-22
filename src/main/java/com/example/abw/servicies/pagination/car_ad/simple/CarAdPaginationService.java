@@ -9,4 +9,8 @@ public interface CarAdPaginationService {
     public List<Ad> getPaginationResultByDefault(int page);
 
     public List<Ad> getPaginationResult(int page, int size);
+
+    public List<Ad> getAdminPaginationResult(int page, int size);
+
+    public List<Ad> getAdminPaginationResultByDefault(int page);
 }

@@ -22,26 +22,31 @@ public class CarAdPagByCarBrand implements CarAdPagServiceWithOneParam<String> {
     private CarAdPaginationRepository carAdPaginationRepository;
 
     @Override
-    public List<Ad> getPaginationResult(String carBrand, int page, int size, String filter, SortKind sortKind) {
+    public List<Ad> getPaginationResult(String carBrand, int page, int size,
+                                        String filter, SortKind sortKind, boolean isAdmin) {
         Pageable pageable;
         if (sortKind == SortKind.ASC) {
             pageable = PageRequest.of(page, size, Sort.by(filter).ascending());
         } else {
             pageable = PageRequest.of(page, size, Sort.by(filter).descending());
         }
-        return new ArrayList<>(carAdPaginationRepository
+        if (isAdmin)
+            return new ArrayList<>(carAdPaginationRepository.findByCarBrand_Name(carBrand, pageable));
+        else return new ArrayList<>(carAdPaginationRepository
                 .findByCarBrand_NameAndSold(carBrand, false, pageable));
     }
 
     @Override
-    public List<Ad> getPaginationResultByDefault(String carBrand, int page, String filter, SortKind sortKind) {
+    public List<Ad> getPaginationResultByDefault(String carBrand, int page,
+                                                 String filter, SortKind sortKind, boolean isAdmin) {
         Pageable pageable;
         if (sortKind == SortKind.ASC) {
             pageable = PageRequest.of(page, appProperties.getPageSize(), Sort.by(filter).ascending());
         } else {
             pageable = PageRequest.of(page, appProperties.getPageSize(), Sort.by(filter).descending());
         }
-        return new ArrayList<>(carAdPaginationRepository
+        if (isAdmin) return new ArrayList<>(carAdPaginationRepository.findByCarBrand_Name(carBrand, pageable));
+        else return new ArrayList<>(carAdPaginationRepository
                 .findByCarBrand_NameAndSold(carBrand, false, pageable));
     }
 }
