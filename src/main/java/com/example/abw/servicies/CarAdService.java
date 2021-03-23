@@ -11,5 +11,5 @@ public interface CarAdService extends GenericService<CarAd>{
 
     public CarAd updateCarAd(CarAdRequest carAdRequest,long id) throws ValidationException, ResourceNotFoundException;
 
-    public void softDelete(long id) throws ResourceNotFoundException;
+    public void softDelete(long id) throws ResourceNotFoundException,ValidationException;
 }

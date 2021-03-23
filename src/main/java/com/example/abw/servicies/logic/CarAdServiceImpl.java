@@ -74,7 +74,7 @@ public class CarAdServiceImpl extends GenericServiceImpl<CarAd> implements CarAd
     @Override
     public CarAd updateCarAd(CarAdRequest carAdRequest, long id) throws ValidationException, ResourceNotFoundException {
         CarAd carAd = findById(id);
-        System.out.println(carAd);
+        isCorrectUser(carAdRequest.getUserId());
         User user = isCorrectUser(carAdRequest.getUserId());
         CarBrand carBrand = findCarBrand(carAdRequest.getCarBrandId());
         carAd.setCarBrand(carBrand);
@@ -117,9 +117,13 @@ public class CarAdServiceImpl extends GenericServiceImpl<CarAd> implements CarAd
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void softDelete(long id) throws ResourceNotFoundException {
+    public void softDelete(long id) throws ResourceNotFoundException, ValidationException {
         CarAd carAd = findById(id);
+        isCorrectUser(carAd.getUser().getId());
         carAd.setSold(true);
+        Date date = new Date();
+        Timestamp endPublicationDate = new Timestamp(date.getTime());
+        carAd.setEndPublicationDate(endPublicationDate);
         carAdRepository.save(carAd);
     }
 
