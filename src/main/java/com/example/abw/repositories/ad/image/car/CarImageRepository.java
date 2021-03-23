@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CarImageRepository extends CrudRepository<CarImage, Long> {
+    public CarImage findByImage(String image);
 }
