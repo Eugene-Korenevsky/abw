@@ -27,25 +27,28 @@ public class DefaultCarAdPagService implements CarAdPaginationService {
 
     @Override
     public List<Ad> getPaginationResult(int page, int size) {
-        Pageable sortedByDate = PageRequest.of(page, size, Sort.by("publicationDate").descending());
+        Pageable sortedByDate = PageRequest.of(page, size, Sort.by(appProperties.getDefaultFilter()).descending());
         return new ArrayList<>(carAdPaginationRepository.readAllBySold(false, sortedByDate));
     }
 
     @Override
     public List<Ad> getPaginationResultByDefault(int page) {
-        Pageable sortedByDate = PageRequest.of(page, appProperties.getPageSize(), Sort.by("publicationDate").descending());
+        Pageable sortedByDate = PageRequest.of(page, appProperties.getPageSize(),
+                Sort.by(appProperties.getDefaultFilter()).descending());
         return new ArrayList<>(carAdPaginationRepository.readAllBySold(false, sortedByDate));
     }
 
     @Override
     public List<Ad> getAdminPaginationResult(int page, int size) {
-        Pageable sortedByDate = PageRequest.of(page, size, Sort.by("publicationDate").descending());
+        Pageable sortedByDate = PageRequest.of(page, size,
+                Sort.by(appProperties.getDefaultFilter()).descending());
         return getResult(sortedByDate);
     }
 
     @Override
     public List<Ad> getAdminPaginationResultByDefault(int page) {
-        Pageable sortedByDate = PageRequest.of(page, appProperties.getPageSize(), Sort.by("publicationDate").descending());
+        Pageable sortedByDate = PageRequest.of(page,
+                appProperties.getPageSize(), Sort.by(appProperties.getDefaultFilter()).descending());
         return getResult(sortedByDate);
     }
 
