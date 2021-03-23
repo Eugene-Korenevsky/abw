@@ -81,6 +81,7 @@ public abstract class GenericServiceImpl<T> implements GenericService<T> {
         } else throw new IllegalArgumentException("entity must not be null");
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public List<T> findAll() {
         List<T> result = new ArrayList<T>();
@@ -90,6 +91,8 @@ public abstract class GenericServiceImpl<T> implements GenericService<T> {
         return result;
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    @Override
     public List<T> saveAll(List<T> entityList) {
         List<T> result = new ArrayList<T>();
         Iterable<T> iterable = crudRepository.saveAll(entityList);
