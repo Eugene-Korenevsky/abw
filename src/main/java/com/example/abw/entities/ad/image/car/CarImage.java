@@ -2,6 +2,7 @@ package com.example.abw.entities.ad.image.car;
 
 import com.example.abw.entities.ad.CarAd;
 import com.example.abw.entities.ad.image.Image;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -23,6 +24,7 @@ public class CarImage implements Serializable, Image {
     @Column(columnDefinition = "text")
     private String image;
 
+    @JsonIgnore
     @NotNull(message = "Image carAd must not be null")
     @ManyToOne
     @JoinColumn(name = "car_ad_id", referencedColumnName = "id")
