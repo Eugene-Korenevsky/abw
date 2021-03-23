@@ -57,7 +57,7 @@ public class CarAd implements Serializable, Ad {
 
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "carAd", fetch = FetchType.EAGER)// why I decided to use FetchType.Eager please read read.me
+    @OneToMany(mappedBy = "carAd", fetch = FetchType.LAZY)
     private Set<CarImage> carImages;
 
     @Override
