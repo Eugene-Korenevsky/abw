@@ -35,7 +35,7 @@ public class User implements Serializable {
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{4,19}$",
             message = "user password must have more than 3 characters but less than 20." +
                     "Must contain only alphanumeric characters.Must contain letters and numbers.")
-    private String password;
+    private transient String password;
 
     @NotNull(message = "user role must not be null")
     @ManyToOne
