@@ -1,59 +1,45 @@
 package com.example.abw.controllers.admin.car_ad.search;
 
-import com.example.abw.AppProperties;
-import com.example.abw.servicies.pagination.car_ad.SortKind;
-import com.example.abw.servicies.pagination.car_ad.with_three_param.CarAdPagServiceWithThreeParam;
-import com.example.abw.servicies.pagination.car_ad.with_two_param.CarAdPagServiceWithTwoParam;
-import com.example.abw.servicies.response.car_ad.search.ResponseServiceWithThreeParam;
-import com.example.abw.servicies.response.car_ad.search.ResponseServiceWithTwoParam;
+import com.example.abw.entities.ad.Ad;
+import com.example.abw.model.pageable.PageableParams;
+import com.example.abw.servicies.CarAdService;
+import com.example.abw.utils.pageable_params.PageableParamsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mapping.PropertyReferenceException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController("adminByPriceController")
 @RequestMapping("admin/carAds/price")
 public class ByPriceController {
     @Autowired
-    private AppProperties appProperties;
-
-
+    private PageableParamsUtil pageableParamsUtilImpl;
     @Autowired
-    private CarAdPagServiceWithTwoParam carAdPagBetweenPrice;
-    @Autowired
-    private CarAdPagServiceWithThreeParam carAdPagBetweenPriceAndCarBrand;
-    @Autowired
-    private CarAdPagServiceWithThreeParam carAdPagBetweenPriceAndCarBrandName;
-
-
-    @Autowired
-    private ResponseServiceWithTwoParam responseServiceByPriceAdmin;
-    @Autowired
-    private ResponseServiceWithThreeParam responseServiceByPriceAndStringAdmin;
+    private CarAdService carAdServiceImpl;
 
     @GetMapping
     public ResponseEntity<?> getAllByPrice(@RequestParam(value = "page") Integer page,
                                            @RequestParam(value = "size", required = false) Integer size,
                                            @RequestParam(value = "filter", required = false) String filter,
-                                           @RequestParam(value = "type", required = false) String type,
+                                           @RequestParam(value = "type", required = false) String sortKind,
                                            @RequestParam(value = "startPrice") Long startPrice,
                                            @RequestParam(value = "endPrice") Long endPrice) {
-        if (type != null) {
-            if (type.equals("asc")) {
-                return responseServiceByPriceAdmin.getResponseEntity(
-                        filter, size, startPrice, endPrice, page, SortKind.ASC, carAdPagBetweenPrice, appProperties);
-            } else if (type.equals("desc")) {
-                return responseServiceByPriceAdmin.getResponseEntity(
-                        filter, size, startPrice, endPrice, page, SortKind.DESC, carAdPagBetweenPrice, appProperties);
-            } else {
-                return responseServiceByPriceAdmin.getResponseEntity(
-                        filter, size, startPrice, endPrice, page, SortKind.DESC, carAdPagBetweenPrice, appProperties);
+        PageableParams pageableParams = pageableParamsUtilImpl.getPageableParams(page, size, filter, sortKind);
+        try {
+            List<Ad> ads = carAdServiceImpl.findAllByPrice(startPrice, endPrice, true, pageableParams);
+            for (Ad carAd : ads) {
+                System.out.println(carAd.getSellItem().getFullName() + " " + carAd.getPublicationDate() + " " +
+                        carAd.getId() + " sold " + carAd.isSold());
             }
-        } else {
-            return responseServiceByPriceAdmin.getResponseEntity(
-                    filter, size, startPrice, endPrice, page, SortKind.DESC, carAdPagBetweenPrice, appProperties);
+            return new ResponseEntity<>(ads, HttpStatus.OK);
+        } catch (PropertyReferenceException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -61,28 +47,21 @@ public class ByPriceController {
     public ResponseEntity<?> getAllByPriceAndCarBrand(@RequestParam(value = "page") Integer page,
                                                       @RequestParam(value = "size", required = false) Integer size,
                                                       @RequestParam(value = "filter", required = false) String filter,
-                                                      @RequestParam(value = "type", required = false) String type,
+                                                      @RequestParam(value = "type", required = false) String sortKind,
                                                       @RequestParam(value = "startPrice") Long startPrice,
                                                       @RequestParam(value = "endPrice") Long endPrice,
                                                       @RequestParam(value = "carBrand") String carBrand) {
-        if (type != null) {
-            if (type.equals("asc")) {
-                return responseServiceByPriceAndStringAdmin.getResponseEntity(
-                        filter, size, startPrice, endPrice, carBrand, page,
-                        SortKind.ASC, carAdPagBetweenPriceAndCarBrand, appProperties);
-            } else if (type.equals("desc")) {
-                return responseServiceByPriceAndStringAdmin.getResponseEntity(
-                        filter, size, startPrice, endPrice, carBrand, page,
-                        SortKind.DESC, carAdPagBetweenPriceAndCarBrand, appProperties);
-            } else {
-                return responseServiceByPriceAndStringAdmin.getResponseEntity(
-                        filter, size, startPrice, endPrice, carBrand, page,
-                        SortKind.DESC, carAdPagBetweenPriceAndCarBrand, appProperties);
+        PageableParams pageableParams = pageableParamsUtilImpl.getPageableParams(page, size, filter, sortKind);
+        try {
+            List<Ad> ads = carAdServiceImpl.findAllByPriceAndCarBrand(startPrice, endPrice,
+                    carBrand, true, pageableParams);
+            for (Ad carAd : ads) {
+                System.out.println(carAd.getSellItem().getFullName() + " " + carAd.getPublicationDate() + " " +
+                        carAd.getId() + " sold " + carAd.isSold());
             }
-        } else {
-            return responseServiceByPriceAndStringAdmin.getResponseEntity(
-                    filter, size, startPrice, endPrice, carBrand, page,
-                    SortKind.DESC, carAdPagBetweenPriceAndCarBrand, appProperties);
+            return new ResponseEntity<>(ads, HttpStatus.OK);
+        } catch (PropertyReferenceException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -90,28 +69,21 @@ public class ByPriceController {
     public ResponseEntity<?> getAllByPriceAndCarBrandName(@RequestParam(value = "page") Integer page,
                                                           @RequestParam(value = "size", required = false) Integer size,
                                                           @RequestParam(value = "filter", required = false) String filter,
-                                                          @RequestParam(value = "type", required = false) String type,
+                                                          @RequestParam(value = "type", required = false) String sortKind,
                                                           @RequestParam(value = "startPrice") Long startPrice,
                                                           @RequestParam(value = "endPrice") Long endPrice,
                                                           @RequestParam(value = "carBrandName") String carBrandName) {
-        if (type != null) {
-            if (type.equals("asc")) {
-                return responseServiceByPriceAndStringAdmin.getResponseEntity(
-                        filter, size, startPrice, endPrice, carBrandName, page,
-                        SortKind.ASC, carAdPagBetweenPriceAndCarBrandName, appProperties);
-            } else if (type.equals("desc")) {
-                return responseServiceByPriceAndStringAdmin.getResponseEntity(
-                        filter, size, startPrice, endPrice, carBrandName, page,
-                        SortKind.DESC, carAdPagBetweenPriceAndCarBrandName, appProperties);
-            } else {
-                return responseServiceByPriceAndStringAdmin.getResponseEntity(
-                        filter, size, startPrice, endPrice, carBrandName, page,
-                        SortKind.DESC, carAdPagBetweenPriceAndCarBrandName, appProperties);
+        PageableParams pageableParams = pageableParamsUtilImpl.getPageableParams(page, size, filter, sortKind);
+        try {
+            List<Ad> ads = carAdServiceImpl.findAllByPriceAndCarBrandName(startPrice, endPrice,
+                    carBrandName, true, pageableParams);
+            for (Ad carAd : ads) {
+                System.out.println(carAd.getSellItem().getFullName() + " " + carAd.getPublicationDate() + " " +
+                        carAd.getId() + " sold " + carAd.isSold());
             }
-        } else {
-            return responseServiceByPriceAndStringAdmin.getResponseEntity(
-                    filter, size, startPrice, endPrice, carBrandName, page,
-                    SortKind.DESC, carAdPagBetweenPriceAndCarBrandName, appProperties);
+            return new ResponseEntity<>(ads, HttpStatus.OK);
+        } catch (PropertyReferenceException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }

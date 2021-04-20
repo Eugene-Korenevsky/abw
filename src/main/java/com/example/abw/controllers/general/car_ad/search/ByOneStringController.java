@@ -1,48 +1,44 @@
 package com.example.abw.controllers.general.car_ad.search;
 
 import com.example.abw.AppProperties;
-import com.example.abw.servicies.pagination.car_ad.SortKind;
-import com.example.abw.servicies.pagination.car_ad.with_one_param.CarAdPagServiceWithOneParam;
-import com.example.abw.servicies.response.car_ad.search.ResponseServiceWithOneParam;
+import com.example.abw.entities.ad.Ad;
+import com.example.abw.model.pageable.PageableParams;
+import com.example.abw.servicies.CarAdService;
+import com.example.abw.utils.pageable_params.PageableParamsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mapping.PropertyReferenceException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/carAds")
 public class ByOneStringController {
     @Autowired
-    CarAdPagServiceWithOneParam carAdPagByCarBrand;
-    @Autowired
-    CarAdPagServiceWithOneParam carAdPagByCarBrandName;
+    private CarAdService carAdServiceImpl;
     @Autowired
     private AppProperties appProperties;
     @Autowired
-    private ResponseServiceWithOneParam responseServiceWithOneParamStringUser;
+    private PageableParamsUtil pageableParamsUtilImpl;
 
     @GetMapping("/carBrand")
     public ResponseEntity<?> getAllByCarBrand(@RequestParam(value = "page") Integer page,
                                               @RequestParam(value = "size", required = false) Integer size,
                                               @RequestParam(value = "filter", required = false) String filter,
-                                              @RequestParam(value = "type", required = false) String type,
+                                              @RequestParam(value = "type", required = false) String sortKind,
                                               @RequestParam(value = "carBrand") String carBrand) {
-        if (type != null) {
-            if (type.equals("asc")) {
-                return responseServiceWithOneParamStringUser.getResponseEntity(
-                        filter, size, carBrand, page, SortKind.ASC, carAdPagByCarBrand, appProperties);
-            } else if (type.equals("desc")) {
-                return responseServiceWithOneParamStringUser.getResponseEntity(
-                        filter, size, carBrand, page, SortKind.DESC, carAdPagByCarBrand, appProperties);
-            } else {
-                return responseServiceWithOneParamStringUser.getResponseEntity(
-                        filter, size, carBrand, page, SortKind.DESC, carAdPagByCarBrand, appProperties);
+        PageableParams pageableParams = pageableParamsUtilImpl.getPageableParams(page, size, filter, sortKind);
+        try {
+            List<Ad> ads = carAdServiceImpl.findAllByCarBrand(carBrand, false, pageableParams);
+            for (Ad carAd : ads) {
+                System.out.println(carAd.getSellItem().getFullName() + " " + carAd.getPublicationDate() + " " +
+                        carAd.getId() + " sold " + carAd.isSold());
             }
-        } else {
-            return responseServiceWithOneParamStringUser.getResponseEntity(
-                    filter, size, carBrand, page, SortKind.DESC, carAdPagByCarBrand, appProperties);
+            return new ResponseEntity<>(ads, HttpStatus.OK);
+        } catch (PropertyReferenceException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -50,22 +46,18 @@ public class ByOneStringController {
     public ResponseEntity<?> getAllByCarBrandName(@RequestParam(value = "page") Integer page,
                                                   @RequestParam(value = "size", required = false) Integer size,
                                                   @RequestParam(value = "filter", required = false) String filter,
-                                                  @RequestParam(value = "type", required = false) String type,
+                                                  @RequestParam(value = "type", required = false) String sortKind,
                                                   @RequestParam(value = "carBrandName") String carBrandName) {
-        if (type != null) {
-            if (type.equals("asc")) {
-                return responseServiceWithOneParamStringUser.getResponseEntity(
-                        filter, size, carBrandName, page, SortKind.ASC, carAdPagByCarBrandName, appProperties);
-            } else if (type.equals("desc")) {
-                return responseServiceWithOneParamStringUser.getResponseEntity(
-                        filter, size, carBrandName, page, SortKind.DESC, carAdPagByCarBrandName, appProperties);
-            } else {
-                return responseServiceWithOneParamStringUser.getResponseEntity(
-                        filter, size, carBrandName, page, SortKind.DESC, carAdPagByCarBrandName, appProperties);
+        PageableParams pageableParams = pageableParamsUtilImpl.getPageableParams(page, size, filter, sortKind);
+        try {
+            List<Ad> ads = carAdServiceImpl.findAllByCarBrandName(carBrandName, false, pageableParams);
+            for (Ad carAd : ads) {
+                System.out.println(carAd.getSellItem().getFullName() + " " + carAd.getPublicationDate() + " " +
+                        carAd.getId() + " sold " + carAd.isSold());
             }
-        } else {
-            return responseServiceWithOneParamStringUser.getResponseEntity(
-                    filter, size, carBrandName, page, SortKind.DESC, carAdPagByCarBrandName, appProperties);
+            return new ResponseEntity<>(ads, HttpStatus.OK);
+        } catch (PropertyReferenceException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }
