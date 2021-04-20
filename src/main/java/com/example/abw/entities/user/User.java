@@ -1,6 +1,7 @@
 package com.example.abw.entities.user;
 
 import lombok.Data;
+import org.springframework.context.annotation.Bean;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

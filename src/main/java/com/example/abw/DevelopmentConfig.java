@@ -2,14 +2,17 @@ package com.example.abw;
 
 
 import com.example.abw.entities.ad.Ad;
+import com.example.abw.entities.ad.CarAd;
 import com.example.abw.model.pageable.PageableParams;
-import com.example.abw.utils.pageable_params.PageableParamsUtil;
 import com.example.abw.servicies.CarAdService;
 import com.example.abw.model.pageable.sort_kind.SortKind;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -17,15 +20,15 @@ public class DevelopmentConfig {
 
     @Bean
     public CommandLineRunner dataLoader(
-            CarAdService carAdServiceImpl,
-            PageableParamsUtil pageableParamsUtilImpl
+            CarAdService carAdServiceImpl
     ) {
         return args -> {
             PageableParams pageableParams;
-            pageableParams = pageableParamsUtilImpl.getPageableParams(1, 1, null, "desc");
+            pageableParams = new PageableParams();
             pageableParams.setSortKind(SortKind.DESC);
             pageableParams.setPage(0);
             pageableParams.setSize(10);
+            pageableParams.setFilter("price");
             System.out.println("byBrand");
             List<Ad> carAds = carAdServiceImpl.findAllByCarBrand("100", false, pageableParams);
             for (Ad carAd : carAds) {
@@ -58,6 +61,7 @@ public class DevelopmentConfig {
                 System.out.println(carAd.getSellItem().getFullName() + " " + carAd.getPublicationDate() + " id : " +
                         carAd.getId() + " price" + carAd.getPrice() + " sold " + carAd.isSold());
             }
+
 
         };
     }
