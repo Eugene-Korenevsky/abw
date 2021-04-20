@@ -27,12 +27,8 @@ public class CarAdController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getCarAd(@PathVariable("id") long id) {
-        try {
-            CarAd carAd = carAdServiceImpl.findById(id);
-            return new ResponseEntity<>(carAd, HttpStatus.OK);
-        } catch (ResourceNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<?> getCarAd(@PathVariable("id") long id) throws ResourceNotFoundException {
+        CarAd carAd = carAdServiceImpl.findById(id);
+        return new ResponseEntity<>(carAd, HttpStatus.OK);
     }
 }

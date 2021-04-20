@@ -22,52 +22,34 @@ public class CarAdController {
     private CarAdService carAdService;
 
     @GetMapping("/{id}")//it is request to get resource with future possibility to change ad
-    public ResponseEntity<?> getCarAd(@PathVariable("id") long id) {
+    public ResponseEntity<?> getCarAd(@PathVariable("id") long id) throws ResourceNotFoundException {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
         org.springframework.security.core.userdetails.User user =
                 (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
-        try {
-            CarAd carAd = carAdService.findById(id);
-            if (carAd.getUser().getEmail().equals(user.getUsername())) {
-                return new ResponseEntity<>(carAd, HttpStatus.OK);
-            } else return new ResponseEntity<>("resource not found", HttpStatus.NOT_FOUND);
-        } catch (ResourceNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+        CarAd carAd = carAdService.findById(id);
+        if (carAd.getUser().getEmail().equals(user.getUsername())) {
+            return new ResponseEntity<>(carAd, HttpStatus.OK);
+        } else return new ResponseEntity<>("resource not found", HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateAd(@RequestBody CarAdRequest carAdRequest, @PathVariable("id") long id) {
-        try {
-            CarAd carAd = carAdService.updateCarAd(carAdRequest, id);
-            return new ResponseEntity<>(carAd, HttpStatus.OK);
-        } catch (ValidationException e) {
-            return new ResponseEntity<>(e.getFullMessage(), HttpStatus.BAD_REQUEST);
-        } catch (ResourceNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<?> updateAd(@RequestBody CarAdRequest carAdRequest,
+                                      @PathVariable("id") long id) throws ResourceNotFoundException, ValidationException {
+        CarAd carAd = carAdService.updateCarAd(carAdRequest, id);
+        return new ResponseEntity<>(carAd, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> softDeleteCarAd(@PathVariable("id") long id) {
-        try {
-            carAdService.softDelete(id);
-            return new ResponseEntity<>("carAd deleted", HttpStatus.OK);
-        } catch (ResourceNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (ValidationException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<?> softDeleteCarAd(@PathVariable("id") long id) throws ResourceNotFoundException,
+            ValidationException {
+        carAdService.softDelete(id);
+        return new ResponseEntity<>("carAd deleted", HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<?> createAd(@RequestBody CarAdRequest carAdRequest) {
-        try {
-            Ad carAd = carAdService.createCarAd(carAdRequest);
-            return new ResponseEntity<>(carAd, HttpStatus.OK);
-        } catch (ValidationException e) {
-            return new ResponseEntity<>(e.getFullMessage(), HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<?> createAd(@RequestBody CarAdRequest carAdRequest) throws ValidationException {
+        Ad carAd = carAdService.createCarAd(carAdRequest);
+        return new ResponseEntity<>(carAd, HttpStatus.OK);
     }
 }
