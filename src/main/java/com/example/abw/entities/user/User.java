@@ -14,7 +14,6 @@ import java.io.Serializable;
 @Table(name = "user_info")
 public class User implements Serializable {
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
@@ -29,14 +28,11 @@ public class User implements Serializable {
     private String email;
 
     @NotNull(message = "user phoneNumber must not be null")
-    @Pattern(regexp = "^\\\\+?[0-9\\\\-\\\\s]*$", message = "user wrong phoneNumber")
+    @Pattern(regexp = "^\\+?[34][-\\(]?\\d{4}\\)?-?\\d{3}-?\\d{2}-?\\d{2}$", message = "user wrong phoneNumber")
     private String phoneNumber;
 
     @NotNull(message = "user password must not be null")
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{4,19}$",
-            message = "user password must have more than 3 characters but less than 20." +
-                    "Must contain only alphanumeric characters.Must contain letters and numbers.")
-    private transient String password;
+    private String password;
 
     @NotNull(message = "user role must not be null")
     @ManyToOne

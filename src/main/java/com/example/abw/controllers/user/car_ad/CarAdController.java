@@ -3,6 +3,7 @@ package com.example.abw.controllers.user.car_ad;
 import com.example.abw.entities.ad.Ad;
 import com.example.abw.entities.ad.CarAd;
 import com.example.abw.entities.request.ad.CarAdRequest;
+import com.example.abw.security.CustomUserDetails;
 import com.example.abw.servicies.CarAdService;
 import com.example.abw.servicies.exceptions.ResourceNotFoundException;
 import com.example.abw.validator.exception.ValidationException;
@@ -25,10 +26,10 @@ public class CarAdController {
     public ResponseEntity<?> getCarAd(@PathVariable("id") long id) throws ResourceNotFoundException {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
-        org.springframework.security.core.userdetails.User user =
-                (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        System.out.println(customUserDetails.getUsername());
         CarAd carAd = carAdService.findById(id);
-        if (carAd.getUser().getEmail().equals(user.getUsername())) {
+        if (carAd.getUser().getEmail().equals(customUserDetails.getUsername())) {
             return new ResponseEntity<>(carAd, HttpStatus.OK);
         } else return new ResponseEntity<>("resource not found", HttpStatus.NOT_FOUND);
     }

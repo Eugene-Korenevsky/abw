@@ -1,68 +1,34 @@
 package com.example.abw;
 
-
-import com.example.abw.entities.ad.Ad;
-import com.example.abw.entities.ad.CarAd;
-import com.example.abw.model.pageable.PageableParams;
-import com.example.abw.servicies.CarAdService;
-import com.example.abw.model.pageable.sort_kind.SortKind;
+import com.example.abw.entities.user.User;
+import com.example.abw.security.jwt.JwtProvider;
+import com.example.abw.servicies.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 public class DevelopmentConfig {
 
     @Bean
     public CommandLineRunner dataLoader(
-            CarAdService carAdServiceImpl
+            UserService userServiceImpl,
+            JwtProvider jwtProvider
     ) {
         return args -> {
-            PageableParams pageableParams;
-            pageableParams = new PageableParams();
-            pageableParams.setSortKind(SortKind.DESC);
-            pageableParams.setPage(0);
-            pageableParams.setSize(10);
-            pageableParams.setFilter("price");
-            System.out.println("byBrand");
-            List<Ad> carAds = carAdServiceImpl.findAllByCarBrand("100", false, pageableParams);
-            for (Ad carAd : carAds) {
-                System.out.println(carAd.getSellItem().getFullName() + " " + carAd.getPublicationDate() + " " +
-                        carAd.getId() + " sold " + carAd.isSold());
-            }
-            System.out.println("byBrandName");
-            List<Ad> carAds1 = carAdServiceImpl.findAllByCarBrandName("Audi", false, pageableParams);
-            for (Ad carAd : carAds1) {
-                System.out.println(carAd.getSellItem().getFullName() + " " + carAd.getPublicationDate() + " id : " +
-                        carAd.getId() + " sold " + carAd.isSold());
-            }
-            System.out.println("byPrice");
-            List<Ad> carAds2 = carAdServiceImpl.findAllByPrice(250000L, 400000L, false, pageableParams);
-            for (Ad carAd : carAds2) {
-                System.out.println(carAd.getSellItem().getFullName() + " " + carAd.getPublicationDate() + " id : " +
-                        carAd.getId() + " price" + carAd.getPrice() + " sold " + carAd.isSold());
-            }
-            System.out.println("byBrandAndPrice");
-            List<Ad> carAds3 = carAdServiceImpl.findAllByPriceAndCarBrand(
-                    250000L, 400000L, "100", false, pageableParams);
-            for (Ad carAd : carAds3) {
-                System.out.println(carAd.getSellItem().getFullName() + " " + carAd.getPublicationDate() + " id : " +
-                        carAd.getId() + " price" + carAd.getPrice() + " sold " + carAd.isSold());
-            }
-            System.out.println("byBrandNameAndPrice");
-            List<Ad> carAds4 = carAdServiceImpl.findAllByPriceAndCarBrandName(200000L, 400000L,
-                    "Audi", false, pageableParams);
-            for (Ad carAd : carAds4) {
-                System.out.println(carAd.getSellItem().getFullName() + " " + carAd.getPublicationDate() + " id : " +
-                        carAd.getId() + " price" + carAd.getPrice() + " sold " + carAd.isSold());
-            }
-
-
+            /*User user = new User();
+            user.setPassword("karager");
+            user.setEmail("kara-91@gmail.com");
+            user.setName("Eugene");
+            user.setPhoneNumber("+375297320231");
+            //userServiceImpl.saveUser(user);
+            User user1 = userServiceImpl.findByEmailAndPassword("kara-91@gmail.com", "karager");
+            System.out.println(user1);
+            String token = jwtProvider.generateToken(user.getEmail());
+            System.out.println("first " + token);
+            System.out.println("second " + jwtProvider.getLoginFromToken(token));
+            System.out.println("third " + jwtProvider.validateToken(token));*/
         };
     }
 }

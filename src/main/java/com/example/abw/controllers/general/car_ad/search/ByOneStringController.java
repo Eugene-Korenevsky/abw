@@ -2,8 +2,10 @@ package com.example.abw.controllers.general.car_ad.search;
 
 import com.example.abw.AppProperties;
 import com.example.abw.entities.ad.Ad;
+import com.example.abw.entities.user.User;
 import com.example.abw.model.pageable.PageableParams;
 import com.example.abw.servicies.CarAdService;
+import com.example.abw.servicies.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

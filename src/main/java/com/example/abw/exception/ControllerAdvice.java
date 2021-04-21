@@ -1,5 +1,7 @@
 package com.example.abw.exception;
 
+import com.example.abw.exception.user.EmailIsAlreadyExistException;
+import com.example.abw.exception.user.UserOrPasswordException;
 import com.example.abw.servicies.exceptions.ResourceNotFoundException;
 import com.example.abw.validator.exception.ValidationException;
 import org.springframework.data.mapping.PropertyReferenceException;
@@ -22,5 +24,15 @@ public class ControllerAdvice {
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<?> validationErrorHandler(ValidationException e) {
         return new ResponseEntity<>(e.getFullMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EmailIsAlreadyExistException.class)
+    public ResponseEntity<?> emailExistHandler(EmailIsAlreadyExistException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserOrPasswordException.class)
+    public ResponseEntity<?> wrongUserOrPasswordHandler(UserOrPasswordException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }
