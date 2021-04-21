@@ -2,7 +2,7 @@ package com.example.abw.controllers.user.car_ad;
 
 import com.example.abw.entities.ad.Ad;
 import com.example.abw.entities.ad.CarAd;
-import com.example.abw.entities.request.ad.CarAdRequest;
+import com.example.abw.model.car_ad.CarAdRequest;
 import com.example.abw.security.CustomUserDetails;
 import com.example.abw.servicies.CarAdService;
 import com.example.abw.exception.entities.ResourceNotFoundException;

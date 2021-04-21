@@ -4,7 +4,7 @@ package com.example.abw.servicies;
 import com.example.abw.entities.ad.Ad;
 import com.example.abw.entities.ad.CarAd;
 import com.example.abw.model.pageable.PageableParams;
-import com.example.abw.entities.request.ad.CarAdRequest;
+import com.example.abw.model.car_ad.CarAdRequest;
 import com.example.abw.exception.entities.ResourceNotFoundException;
 import com.example.abw.exception.validation.ValidationException;
 

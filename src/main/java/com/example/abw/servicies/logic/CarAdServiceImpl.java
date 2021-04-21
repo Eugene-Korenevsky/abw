@@ -5,7 +5,7 @@ import com.example.abw.entities.ad.CarAd;
 import com.example.abw.entities.ad.image.Image;
 import com.example.abw.entities.ad.image.car.CarImage;
 import com.example.abw.model.pageable.PageableParams;
-import com.example.abw.entities.request.ad.CarAdRequest;
+import com.example.abw.model.car_ad.CarAdRequest;
 import com.example.abw.entities.sell_item.car.CarBrand;
 import com.example.abw.entities.user.User;
 import com.example.abw.repositories.ad.CarAdRepository;
