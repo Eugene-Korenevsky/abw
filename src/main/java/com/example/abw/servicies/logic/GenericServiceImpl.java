@@ -2,9 +2,9 @@ package com.example.abw.servicies.logic;
 
 import com.example.abw.entities.exception.ValidationError;
 import com.example.abw.servicies.GenericService;
-import com.example.abw.servicies.exceptions.ResourceNotFoundException;
+import com.example.abw.exception.entities.ResourceNotFoundException;
 import com.example.abw.validator.MyValidator;
-import com.example.abw.validator.exception.ValidationException;
+import com.example.abw.exception.validation.ValidationException;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

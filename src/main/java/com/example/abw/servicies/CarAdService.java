@@ -5,8 +5,8 @@ import com.example.abw.entities.ad.Ad;
 import com.example.abw.entities.ad.CarAd;
 import com.example.abw.model.pageable.PageableParams;
 import com.example.abw.entities.request.ad.CarAdRequest;
-import com.example.abw.servicies.exceptions.ResourceNotFoundException;
-import com.example.abw.validator.exception.ValidationException;
+import com.example.abw.exception.entities.ResourceNotFoundException;
+import com.example.abw.exception.validation.ValidationException;
 
 import java.util.List;
 

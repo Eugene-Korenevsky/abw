@@ -1,7 +1,7 @@
 package com.example.abw.servicies;
 
-import com.example.abw.servicies.exceptions.ResourceNotFoundException;
-import com.example.abw.validator.exception.ValidationException;
+import com.example.abw.exception.entities.ResourceNotFoundException;
+import com.example.abw.exception.validation.ValidationException;
 
 import java.util.List;
 

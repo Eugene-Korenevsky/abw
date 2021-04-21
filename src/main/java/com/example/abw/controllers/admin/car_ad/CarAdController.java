@@ -4,7 +4,7 @@ import com.example.abw.entities.ad.Ad;
 import com.example.abw.entities.ad.CarAd;
 import com.example.abw.model.pageable.PageableParams;
 import com.example.abw.servicies.CarAdService;
-import com.example.abw.servicies.exceptions.ResourceNotFoundException;
+import com.example.abw.exception.entities.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
