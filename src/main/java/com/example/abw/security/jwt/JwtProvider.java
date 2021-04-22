@@ -25,11 +25,10 @@ public class JwtProvider {
 
     public boolean validateToken(String token) {
         try {
-            System.out.println(Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token));
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
             return true;
         } catch (Exception e) {
-            System.out.println("invalid token");
+
         }
         return false;
     }

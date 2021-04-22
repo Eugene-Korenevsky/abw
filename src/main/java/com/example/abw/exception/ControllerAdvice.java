@@ -1,5 +1,6 @@
 package com.example.abw.exception;
 
+import com.example.abw.exception.security.PrivacyViolationException;
 import com.example.abw.exception.user.EmailIsAlreadyExistException;
 import com.example.abw.exception.user.UserOrPasswordException;
 import com.example.abw.exception.entities.ResourceNotFoundException;
@@ -33,6 +34,11 @@ public class ControllerAdvice {
 
     @ExceptionHandler(UserOrPasswordException.class)
     public ResponseEntity<?> wrongUserOrPasswordHandler(UserOrPasswordException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PrivacyViolationException.class)
+    public ResponseEntity<?> privacyViolationHandler(PrivacyViolationException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }
