@@ -14,13 +14,23 @@ import java.util.List;
 
 public interface CarAdvertisementService extends GenericService<CarAdvertisement> {
     public CarAdvertisement createCarAdvertisement(CarAdvertisementRequest carAdvertisementRequest)
-            throws ValidationException, IOException,ResourceNotFoundException,PrivacyViolationException;
+            throws ValidationException, IOException, ResourceNotFoundException, PrivacyViolationException;
 
     public CarAdvertisement updateCarAdvertisement(CarAdvertisementRequest carAdvertisementRequest, long id)
             throws ValidationException, ResourceNotFoundException, PrivacyViolationException;
 
+    public CarAdvertisement findAdvertisement(long advertisementId) throws ResourceNotFoundException;
+
+    public CarAdvertisement findUserAdvertisement(long advertisementId)
+            throws ResourceNotFoundException, PrivacyViolationException;
+
+    public CarAdvertisement refreshCarAdvertisement(long advertisementId)
+            throws ResourceNotFoundException, PrivacyViolationException;
+
+    public List<CarAdvertisement> findAllByUser(PageableParams pageableParams) throws ResourceNotFoundException;
+
     public void softDelete(long id)
-            throws ResourceNotFoundException, ValidationException,PrivacyViolationException;
+            throws ResourceNotFoundException, ValidationException, PrivacyViolationException;
 
     public List<Advertisement> findAllByCarBrand(String carBrand, boolean isAdmin, PageableParams pageableParams);
 

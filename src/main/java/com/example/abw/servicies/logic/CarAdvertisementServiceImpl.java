@@ -101,6 +101,7 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
 
     }
 
+    @Transactional
     @Override
     public List<Advertisement> findAllByCarBrand(String carBrand, boolean isAdmin, PageableParams pageableParams) {
         Pageable pageable = PageableUtil.getPageable(pageableParams);
@@ -110,6 +111,8 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
                 .findByCarBrand_NameAndSold(carBrand, false, pageable));
     }
 
+
+    @Transactional
     @Override
     public List<Advertisement> findAllByCarBrandName(String carBrandName, boolean isAdmin, PageableParams pageableParams) {
         Pageable pageable = PageableUtil.getPageable(pageableParams);
@@ -119,6 +122,7 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
                 .findByCarBrand_CarBrandName_NameAndSold(carBrandName, false, pageable));
     }
 
+    @Transactional
     @Override
     public List<Advertisement> findAllByPrice(Long startPrice, Long endPrice, boolean isAdmin, PageableParams pageableParams) {
         Pageable pageable = PageableUtil.getPageable(pageableParams);
@@ -128,6 +132,7 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
                 readAllByPriceBetweenAndSold(startPrice, endPrice, false, pageable));
     }
 
+    @Transactional
     @Override
     public List<Advertisement> findAllByPriceAndCarBrand(Long startPrice, Long endPrice, String carBrand,
                                                          boolean isAdmin, PageableParams pageableParams) {
@@ -140,6 +145,7 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
                         false, carBrand, pageable));
     }
 
+    @Transactional
     @Override
     public List<Advertisement> findAllByPriceAndCarBrandName(Long startPrice, Long endPrice, String carBrandName,
                                                              boolean isAdmin, PageableParams pageableParams) {
@@ -152,6 +158,7 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
                         false, carBrandName, pageable));
     }
 
+    @Transactional
     @Override
     public List<Advertisement> findAll(boolean isAdmin, PageableParams pageableParams) {
         Pageable pageable = PageableUtil.getPageable(pageableParams);
@@ -171,25 +178,51 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
             carAdvertisement.setEndPublicationDate(endPublicationDate);
             carAdvertisementRepository.save(carAdvertisement);
         } else throw new PrivacyViolationException("privacy violation");
-        // isCorrectUser(carAd.getUser().getId());
-
     }
 
-   /* private User isCorrectUser(long id) throws ValidationException {
-        User user;
-        try {
-            user = userServiceImpl.findById(id);
-        } catch (ResourceNotFoundException e) {
-            throw new ValidationException("user not found");
-        }
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        Authentication authentication = securityContext.getAuthentication();
-        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-        if (!user.getEmail().equals(customUserDetails.getUsername()))
-            throw new ValidationException("not Correct user");
-        return user;
 
-    }*/
+    @Override
+    public CarAdvertisement findAdvertisement(long advertisementId) throws ResourceNotFoundException {
+        CarAdvertisement carAdvertisement = findById(advertisementId);
+        if (carAdvertisement.isSold()) throw new ResourceNotFoundException("advertisement not found");
+        return carAdvertisement;
+    }
+
+    @Override
+    public CarAdvertisement findUserAdvertisement(long advertisementId)
+            throws ResourceNotFoundException, PrivacyViolationException {
+        CarAdvertisement carAdvertisement = findById(advertisementId);
+        if (userUtil.getCustomUserDetails().getUsername().equals(carAdvertisement.getUser().getEmail()))
+            return carAdvertisement;
+        throw new PrivacyViolationException("privacy violation");
+    }
+
+    @Transactional
+    @Override
+    public List<CarAdvertisement> findAllByUser(PageableParams pageableParams) throws ResourceNotFoundException {
+        Pageable pageable = PageableUtil.getPageable(pageableParams);
+        CustomUserDetails customUserDetails = userUtil.getCustomUserDetails();
+        if (customUserDetails != null) {
+            User user = userServiceImpl.findByEmail(customUserDetails.getUsername());
+            return carAdvertisementPaginationRepository.readAllByUser(user, pageable);
+        }
+        throw new ResourceNotFoundException("user not found");
+    }
+
+    @Override
+    public CarAdvertisement refreshCarAdvertisement(long advertisementId)
+            throws ResourceNotFoundException, PrivacyViolationException {
+        CarAdvertisement carAdvertisement = findById(advertisementId);
+        if (userUtil.getCustomUserDetails().getUsername().equals(carAdvertisement.getUser().getEmail())) {
+            Date date = new Date();
+            Timestamp currentTime = new Timestamp(date.getTime());
+            carAdvertisement.setPublicationDate(currentTime);
+            carAdvertisement.setEndPublicationDate(null);
+            carAdvertisement.setSold(false);
+            return carAdvertisementRepository.save(carAdvertisement);
+        }
+        throw new PrivacyViolationException("privacy violation");
+    }
 
     private CarBrand findCarBrand(long id) throws ValidationException {
         try {

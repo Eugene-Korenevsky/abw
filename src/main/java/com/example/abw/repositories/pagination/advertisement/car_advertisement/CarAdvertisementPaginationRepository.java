@@ -1,6 +1,7 @@
 package com.example.abw.repositories.pagination.advertisement.car_advertisement;
 
 import com.example.abw.entities.advertisement.CarAdvertisement;
+import com.example.abw.entities.user.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
@@ -10,6 +11,8 @@ import java.util.List;
 @Repository
 public interface CarAdvertisementPaginationRepository extends PagingAndSortingRepository<CarAdvertisement, Long> {
     List<CarAdvertisement> readAllBySold(boolean sold, Pageable pageable);
+
+    List<CarAdvertisement> readAllByUser(User user, Pageable pageable);
 
     public List<CarAdvertisement> findByCarBrand_CarBrandName_NameAndSold(String name, boolean sold, Pageable pageable);
 

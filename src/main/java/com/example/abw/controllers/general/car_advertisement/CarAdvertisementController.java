@@ -28,7 +28,7 @@ public class CarAdvertisementController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getCarAd(@PathVariable("id") long id) throws ResourceNotFoundException {
-        CarAdvertisement carAd = carAdvertisementServiceImpl.findById(id);
+        CarAdvertisement carAd = carAdvertisementServiceImpl.findAdvertisement(id);
         return new ResponseEntity<>(carAd, HttpStatus.OK);
     }
 }

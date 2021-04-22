@@ -1,11 +1,17 @@
 package com.example.abw;
 
-import com.example.abw.entities.user.User;
+import com.example.abw.entities.advertisement.CarAdvertisement;
+import com.example.abw.repositories.advertisement.CarAdvertisementRepository;
 import com.example.abw.security.jwt.JwtProvider;
 import com.example.abw.servicies.UserService;
+import com.example.abw.servicies.business_processors.ActiveCarAdvertisements;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
 
 
 @Configuration
@@ -14,7 +20,9 @@ public class DevelopmentConfig {
     @Bean
     public CommandLineRunner dataLoader(
             UserService userServiceImpl,
-            JwtProvider jwtProvider
+            JwtProvider jwtProvider,
+            ActiveCarAdvertisements activeCarAdvertisements,
+            CarAdvertisementRepository carAdvertisementRepository
     ) {
         return args -> {
             /*User user = new User();

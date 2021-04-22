@@ -13,4 +13,8 @@ public class AppProperties {
     private int pageSize;
     private String defaultFilter;
     private String defaultRole;
+    private long activeTime;
+    private String carAdvertisementMessage;
+    private String advertisementText;
+    private String carAdvertisementSubject;
 }
