@@ -2,6 +2,7 @@ package com.example.abw.controllers.user.car_advertisement;
 
 import com.example.abw.entities.advertisement.Advertisement;
 import com.example.abw.entities.advertisement.CarAdvertisement;
+import com.example.abw.exception.security.PrivacyViolationException;
 import com.example.abw.model.car_advertisement.CarAdvertisementRequest;
 import com.example.abw.security.CustomUserDetails;
 import com.example.abw.servicies.CarAdvertisementService;
@@ -37,20 +38,22 @@ public class CarAdvertisementController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateAd(@RequestBody CarAdvertisementRequest carAdvertisementRequest,
-                                      @PathVariable("id") long id) throws ResourceNotFoundException, ValidationException {
+                                      @PathVariable("id") long id) throws ResourceNotFoundException,
+            ValidationException, PrivacyViolationException {
         CarAdvertisement carAd = carAdvertisementService.updateCarAdvertisement(carAdvertisementRequest, id);
         return new ResponseEntity<>(carAd, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> softDeleteCarAd(@PathVariable("id") long id) throws ResourceNotFoundException,
-            ValidationException {
+            ValidationException, PrivacyViolationException {
         carAdvertisementService.softDelete(id);
         return new ResponseEntity<>("carAd deleted", HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<?> createAd(@RequestBody CarAdvertisementRequest carAdvertisementRequest) throws ValidationException, IOException {
+    public ResponseEntity<?> createAd(@RequestBody CarAdvertisementRequest carAdvertisementRequest)
+            throws ValidationException, IOException, ResourceNotFoundException, PrivacyViolationException {
         Advertisement carAdvertisement = carAdvertisementService.createCarAdvertisement(carAdvertisementRequest);
         return new ResponseEntity<>(carAdvertisement, HttpStatus.OK);
     }

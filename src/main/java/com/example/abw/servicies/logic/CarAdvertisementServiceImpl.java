@@ -3,6 +3,7 @@ package com.example.abw.servicies.logic;
 import com.example.abw.entities.advertisement.Advertisement;
 import com.example.abw.entities.advertisement.CarAdvertisement;
 import com.example.abw.entities.advertisement.image.car.CarImage;
+import com.example.abw.exception.security.PrivacyViolationException;
 import com.example.abw.model.pageable.PageableParams;
 import com.example.abw.model.car_advertisement.CarAdvertisementRequest;
 import com.example.abw.entities.sell_item.car.CarBrand;
@@ -10,6 +11,7 @@ import com.example.abw.entities.user.User;
 import com.example.abw.repositories.advertisement.CarAdvertisementRepository;
 import com.example.abw.repositories.pagination.advertisement.car_advertisement.CarAdvertisementPaginationRepository;
 import com.example.abw.security.CustomUserDetails;
+import com.example.abw.security.utils.UserUtil;
 import com.example.abw.servicies.CarAdvertisementService;
 import com.example.abw.servicies.CarBrandService;
 import com.example.abw.servicies.UserService;
@@ -32,58 +34,71 @@ import java.util.*;
 @Service
 public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertisement> implements CarAdvertisementService {
 
-    private CarAdvertisementRepository carAdvertisementRepository;
-    private CarBrandService carBrandServiceImpl;
-    private UserService userServiceImpl;
-    private CarAdvertisementPaginationRepository carAdvertisementPaginationRepository;
+    private final CarAdvertisementRepository carAdvertisementRepository;
+    private final CarBrandService carBrandServiceImpl;
+    private final UserService userServiceImpl;
+    private final CarAdvertisementPaginationRepository carAdvertisementPaginationRepository;
+    private final UserUtil userUtil;
 
     public CarAdvertisementServiceImpl(CarAdvertisementRepository carAdvertisementRepository, UserService userServiceImpl,
-                                       CarBrandService carBrandServiceImpl, CarAdvertisementPaginationRepository carAdvertisementPaginationRepository
+                                       CarBrandService carBrandServiceImpl,
+                                       CarAdvertisementPaginationRepository carAdvertisementPaginationRepository,
+                                       UserUtil userUtil
     ) {
         super(carAdvertisementRepository, CarAdvertisement.class);
         this.carAdvertisementRepository = carAdvertisementRepository;
         this.userServiceImpl = userServiceImpl;
         this.carBrandServiceImpl = carBrandServiceImpl;
         this.carAdvertisementPaginationRepository = carAdvertisementPaginationRepository;
+        this.userUtil = userUtil;
     }
 
     @Override
-    public CarAdvertisement createCarAdvertisement(CarAdvertisementRequest carAdvertisementRequest) throws ValidationException, IOException {
-        Set<CarImage> carImages = new HashSet<>();
-        CarAdvertisement carAd = new CarAdvertisement();
-        Date date = new Date();
-        Timestamp timestamp = new Timestamp(date.getTime());
-        User user = isCorrectUser(carAdvertisementRequest.getUserId());
-        CarBrand carBrand = findCarBrand(carAdvertisementRequest.getCarBrandId());
-        carAd.setPublicationDate(timestamp);
-        carAd.setCarBrand(carBrand);
-        carAd.setDescriptions(carAdvertisementRequest.getDescriptions());
-        carAd.setPrice(carAdvertisementRequest.getPrice());
-        carAd.setUser(user);
-        carAd = create(carAd);
-        for (MultipartFile multipartImage : carAdvertisementRequest.getImages()) {
-            CarImage carImage = new CarImage();
-            carImage.setContent(multipartImage.getBytes());
-            carImage.setCarAd(carAd);
-            carImages.add(carImage);
+    public CarAdvertisement createCarAdvertisement(CarAdvertisementRequest carAdvertisementRequest)
+            throws ValidationException, IOException, ResourceNotFoundException {
+        CustomUserDetails customUserDetails = userUtil.getCustomUserDetails();
+        User user = userServiceImpl.findByEmail(customUserDetails.getUsername());
+        if (user != null) {
+            Set<CarImage> carImages = new HashSet<>();
+            CarAdvertisement carAd = new CarAdvertisement();
+            Date date = new Date();
+            Timestamp timestamp = new Timestamp(date.getTime());
+            CarBrand carBrand = findCarBrand(carAdvertisementRequest.getCarBrandId());
+            carAd.setPublicationDate(timestamp);
+            carAd.setCarBrand(carBrand);
+            carAd.setDescriptions(carAdvertisementRequest.getDescriptions());
+            carAd.setPrice(carAdvertisementRequest.getPrice());
+            carAd.setUser(user);
+            carAd = create(carAd);
+            for (MultipartFile multipartImage : carAdvertisementRequest.getImages()) {
+                if (multipartImage != null) {
+                    CarImage carImage = new CarImage();
+                    carImage.setContent(multipartImage.getBytes());
+                    carImage.setCarAd(carAd);
+                    carImages.add(carImage);
+                }
+            }
+            carAd.setCarImages(carImages);
+            return create(carAd);
         }
-        carAd.setCarImages(carImages);
-        return create(carAd);
+        throw new ResourceNotFoundException("user not found");
     }
 
     @Transactional
     @Override
-    public CarAdvertisement updateCarAdvertisement(CarAdvertisementRequest carAdvertisementRequest, long id) throws ValidationException, ResourceNotFoundException {
+    public CarAdvertisement updateCarAdvertisement(CarAdvertisementRequest carAdvertisementRequest, long id)
+            throws ValidationException, ResourceNotFoundException, PrivacyViolationException {
         CarAdvertisement carAd = findById(id);
-        isCorrectUser(carAdvertisementRequest.getUserId());
-        User user = isCorrectUser(carAdvertisementRequest.getUserId());
-        CarBrand carBrand = findCarBrand(carAdvertisementRequest.getCarBrandId());
-        carAd.setCarBrand(carBrand);
-        carAd.setDescriptions(carAdvertisementRequest.getDescriptions());
-        carAd.setPrice(carAdvertisementRequest.getPrice());
-        carAd.setUser(user);
-        update(carAd, id);
-        return findById(id);
+        if (userUtil.getCustomUserDetails().getUsername().equals(carAd.getUser().getEmail())) {
+            CarBrand carBrand = findCarBrand(carAdvertisementRequest.getCarBrandId());
+            carAd.setCarBrand(carBrand);
+            carAd.setDescriptions(carAdvertisementRequest.getDescriptions());
+            carAd.setPrice(carAdvertisementRequest.getPrice());
+            update(carAd, id);
+            return findById(id);
+        }
+        throw new PrivacyViolationException("privacy violation");
+
     }
 
     @Override
@@ -146,17 +161,21 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void softDelete(long id) throws ResourceNotFoundException, ValidationException {
-        CarAdvertisement carAd = findById(id);
-        isCorrectUser(carAd.getUser().getId());
-        carAd.setSold(true);
-        Date date = new Date();
-        Timestamp endPublicationDate = new Timestamp(date.getTime());
-        carAd.setEndPublicationDate(endPublicationDate);
-        carAdvertisementRepository.save(carAd);
+    public void softDelete(long id)
+            throws ResourceNotFoundException, ValidationException, PrivacyViolationException {
+        CarAdvertisement carAdvertisement = findById(id);
+        if (userUtil.getCustomUserDetails().getUsername().equals(carAdvertisement.getUser().getEmail())) {
+            carAdvertisement.setSold(true);
+            Date date = new Date();
+            Timestamp endPublicationDate = new Timestamp(date.getTime());
+            carAdvertisement.setEndPublicationDate(endPublicationDate);
+            carAdvertisementRepository.save(carAdvertisement);
+        } else throw new PrivacyViolationException("privacy violation");
+        // isCorrectUser(carAd.getUser().getId());
+
     }
 
-    private User isCorrectUser(long id) throws ValidationException {
+   /* private User isCorrectUser(long id) throws ValidationException {
         User user;
         try {
             user = userServiceImpl.findById(id);
@@ -170,7 +189,7 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
             throw new ValidationException("not Correct user");
         return user;
 
-    }
+    }*/
 
     private CarBrand findCarBrand(long id) throws ValidationException {
         try {
