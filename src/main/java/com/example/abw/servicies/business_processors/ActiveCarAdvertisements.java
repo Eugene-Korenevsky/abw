@@ -2,6 +2,7 @@ package com.example.abw.servicies.business_processors;
 
 import com.example.abw.AppProperties;
 import com.example.abw.entities.advertisement.CarAdvertisement;
+import com.example.abw.model.advertisement.Status;
 import com.example.abw.repositories.advertisement.CarAdvertisementRepository;
 import com.example.abw.servicies.CarAdvertisementService;
 import com.example.abw.servicies.MessageService;
@@ -36,9 +37,9 @@ public class ActiveCarAdvertisements {
         long time = date.getTime() - appProperties.getActiveTime();
         Timestamp timestamp = new Timestamp(time);
         List<CarAdvertisement> carAdvertisements = carAdvertisementRepository
-                .readAllBySoldAndPublicationDateLessThan(false, timestamp);
+                .readAllByStatusAndPublicationDateLessThan(Status.ACTIVE, timestamp);
         for (CarAdvertisement carAdvertisement : carAdvertisements) {
-            carAdvertisement.setSold(true);
+            carAdvertisement.setStatus(Status.EXPIRED);
             carAdvertisement.setEndPublicationDate(new Timestamp(date.getTime()));
             messageService.sendMessage(carAdvertisement.getUser().getEmail(),
                     messageTextUtil.getCarAdvertisementMessageText(carAdvertisement),

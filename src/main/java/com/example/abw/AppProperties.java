@@ -17,4 +17,7 @@ public class AppProperties {
     private String carAdvertisementMessage;
     private String advertisementText;
     private String carAdvertisementSubject;
+    private String cryptoCompareUrl;
+    private String cryptoCompareKey;
+    private String cryptoCompareTo;
 }

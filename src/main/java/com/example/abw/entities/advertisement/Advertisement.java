@@ -4,6 +4,8 @@ package com.example.abw.entities.advertisement;
 import com.example.abw.entities.advertisement.image.Image;
 import com.example.abw.entities.sell_item.SellItem;
 import com.example.abw.entities.user.User;
+import com.example.abw.model.advertisement.Status;
+import com.example.abw.model.currency.Currency;
 
 import java.sql.Timestamp;
 import java.util.Set;
@@ -23,10 +25,6 @@ public interface Advertisement {
 
     public void setPrice(long price);
 
-    public boolean isSold();
-
-    public void setSold(boolean sold);
-
     public String getDescriptions();
 
     public void setDescriptions(String descriptions);
@@ -40,4 +38,12 @@ public interface Advertisement {
     public Timestamp getEndPublicationDate();
 
     public void setEndPublicationDate(Timestamp endPublicationDate);
+
+    public Status getStatus();
+
+    public void setStatus(Status status);
+
+    public Currency getPriceCurrency();
+
+    public void setPriceCurrency(Currency priceCurrency);
 }

@@ -4,8 +4,10 @@ package com.example.abw.servicies;
 import com.example.abw.entities.advertisement.Advertisement;
 import com.example.abw.entities.advertisement.CarAdvertisement;
 import com.example.abw.exception.security.PrivacyViolationException;
+import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementResponse;
+import com.example.abw.model.currency.Currency;
 import com.example.abw.model.pageable.PageableParams;
-import com.example.abw.model.car_advertisement.CarAdvertisementRequest;
+import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementRequest;
 import com.example.abw.exception.entities.ResourceNotFoundException;
 import com.example.abw.exception.validation.ValidationException;
 
@@ -13,38 +15,40 @@ import java.io.IOException;
 import java.util.List;
 
 public interface CarAdvertisementService extends GenericService<CarAdvertisement> {
-    public CarAdvertisement createCarAdvertisement(CarAdvertisementRequest carAdvertisementRequest)
+    public CarAdvertisementResponse createCarAdvertisement(CarAdvertisementRequest carAdvertisementRequest)
             throws ValidationException, IOException, ResourceNotFoundException, PrivacyViolationException;
 
-    public CarAdvertisement updateCarAdvertisement(CarAdvertisementRequest carAdvertisementRequest, long id)
+    public CarAdvertisementResponse updateCarAdvertisement(CarAdvertisementRequest carAdvertisementRequest, long id)
             throws ValidationException, ResourceNotFoundException, PrivacyViolationException;
 
-    public CarAdvertisement findAdvertisement(long advertisementId) throws ResourceNotFoundException;
+    public CarAdvertisementResponse findAdvertisement(long advertisementId, Currency currency)
+            throws ResourceNotFoundException;
 
-    public CarAdvertisement findUserAdvertisement(long advertisementId)
+    public CarAdvertisementResponse findUserAdvertisement(long advertisementId)
             throws ResourceNotFoundException, PrivacyViolationException;
 
-    public CarAdvertisement refreshCarAdvertisement(long advertisementId)
+    public CarAdvertisementResponse refreshCarAdvertisement(long advertisementId)
             throws ResourceNotFoundException, PrivacyViolationException;
 
-    public List<CarAdvertisement> findAllByUser(PageableParams pageableParams) throws ResourceNotFoundException;
+    public List<CarAdvertisementResponse> findAllByUser(PageableParams pageableParams) throws ResourceNotFoundException;
 
     public void softDelete(long id)
             throws ResourceNotFoundException, ValidationException, PrivacyViolationException;
 
-    public List<Advertisement> findAllByCarBrand(String carBrand, boolean isAdmin, PageableParams pageableParams);
+    public List<CarAdvertisementResponse> findAllByCarBrand(
+            String carBrand, boolean isAdmin, PageableParams pageableParams);
 
-    public List<Advertisement> findAllByCarBrandName(String carBrandName, boolean isAdmin, PageableParams pageableParams);
+    public List<CarAdvertisementResponse> findAllByCarBrandName(String carBrandName, boolean isAdmin, PageableParams pageableParams);
 
-    public List<Advertisement> findAllByPrice(Long startPrice, Long endPrice, boolean isAdmin, PageableParams pageableParams);
+    public List<CarAdvertisementResponse> findAllByPrice(Long startPrice, Long endPrice, boolean isAdmin, PageableParams pageableParams);
 
-    public List<Advertisement> findAllByPriceAndCarBrand(Long startPrice, Long endPrice, String carBrand,
+    public List<CarAdvertisementResponse> findAllByPriceAndCarBrand(Long startPrice, Long endPrice, String carBrand,
                                                          boolean isAdmin, PageableParams pageableParams);
 
-    public List<Advertisement> findAllByPriceAndCarBrandName(Long startPrice, Long endPrice, String carBrandName,
+    public List<CarAdvertisementResponse> findAllByPriceAndCarBrandName(Long startPrice, Long endPrice, String carBrandName,
                                                              boolean isAdmin, PageableParams pageableParams);
 
-    public List<Advertisement> findAll(boolean isAdmin, PageableParams pageableParams);
+    public List<CarAdvertisementResponse> findAll(boolean isAdmin, PageableParams pageableParams);
 
 
 }

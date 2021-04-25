@@ -1,4 +1,4 @@
-package com.example.abw.controllers.user.car_advertisement;
+package com.example.abw.controllers.general.car_advertisement;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

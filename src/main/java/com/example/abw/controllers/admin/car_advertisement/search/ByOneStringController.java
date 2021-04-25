@@ -2,6 +2,8 @@ package com.example.abw.controllers.admin.car_advertisement.search;
 
 import com.example.abw.AppProperties;
 import com.example.abw.entities.advertisement.Advertisement;
+import com.example.abw.entities.advertisement.CarAdvertisement;
+import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementResponse;
 import com.example.abw.model.pageable.PageableParams;
 import com.example.abw.servicies.CarAdvertisementService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +27,16 @@ public class ByOneStringController {
     @GetMapping("/carBrand")
     public ResponseEntity<?> getAllByCarBrand(PageableParams pageableParams,
                                               @RequestParam(value = "carBrand") String carBrand) {
-        List<Advertisement> advertisements = carAdvertisementServiceImpl.findAllByCarBrand(carBrand, true, pageableParams);
+        List<CarAdvertisementResponse> advertisements =
+                carAdvertisementServiceImpl.findAllByCarBrand(carBrand, true, pageableParams);
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
     }
 
     @GetMapping("/carBrandName")
     public ResponseEntity<?> getAllByCarBrandName(PageableParams pageableParams,
                                                   @RequestParam(value = "carBrandName") String carBrandName) {
-        List<Advertisement> advertisements = carAdvertisementServiceImpl.findAllByCarBrandName(carBrandName, false, pageableParams);
+        List<CarAdvertisementResponse> advertisements =
+                carAdvertisementServiceImpl.findAllByCarBrandName(carBrandName, false, pageableParams);
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
     }
 }

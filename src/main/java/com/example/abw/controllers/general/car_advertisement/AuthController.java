@@ -1,4 +1,4 @@
-package com.example.abw.controllers.user.car_advertisement;
+package com.example.abw.controllers.general.car_advertisement;
 
 import com.example.abw.entities.user.User;
 import com.example.abw.exception.user.EmailIsAlreadyExistException;

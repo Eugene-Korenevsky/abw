@@ -3,7 +3,8 @@ package com.example.abw.controllers.user.car_advertisement;
 import com.example.abw.entities.advertisement.Advertisement;
 import com.example.abw.entities.advertisement.CarAdvertisement;
 import com.example.abw.exception.security.PrivacyViolationException;
-import com.example.abw.model.car_advertisement.CarAdvertisementRequest;
+import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementRequest;
+import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementResponse;
 import com.example.abw.model.pageable.PageableParams;
 import com.example.abw.servicies.CarAdvertisementService;
 import com.example.abw.exception.entities.ResourceNotFoundException;
@@ -22,7 +23,7 @@ public class CarAdvertisementController {
     @Autowired
     private CarAdvertisementService carAdvertisementService;
 
-    @GetMapping("/{id}")//it is request to get resource with future possibility to change ad
+    @GetMapping("/{id}")//it is request to get resource with future possibility to change advertisement
     public ResponseEntity<?> getCarAd(@PathVariable("id") long id)
             throws ResourceNotFoundException, PrivacyViolationException {
         return new ResponseEntity<>(carAdvertisementService.findUserAdvertisement(id), HttpStatus.OK);
@@ -43,7 +44,7 @@ public class CarAdvertisementController {
     public ResponseEntity<?> updateAd(@RequestBody CarAdvertisementRequest carAdvertisementRequest,
                                       @PathVariable("id") long id) throws ResourceNotFoundException,
             ValidationException, PrivacyViolationException {
-        CarAdvertisement carAd = carAdvertisementService.updateCarAdvertisement(carAdvertisementRequest, id);
+        CarAdvertisementResponse carAd = carAdvertisementService.updateCarAdvertisement(carAdvertisementRequest, id);
         return new ResponseEntity<>(carAd, HttpStatus.OK);
     }
 
@@ -57,7 +58,7 @@ public class CarAdvertisementController {
     @PostMapping
     public ResponseEntity<?> createAd(@RequestBody CarAdvertisementRequest carAdvertisementRequest)
             throws ValidationException, IOException, ResourceNotFoundException, PrivacyViolationException {
-        Advertisement carAdvertisement = carAdvertisementService.createCarAdvertisement(carAdvertisementRequest);
+        CarAdvertisementResponse carAdvertisement = carAdvertisementService.createCarAdvertisement(carAdvertisementRequest);
         return new ResponseEntity<>(carAdvertisement, HttpStatus.OK);
     }
 }

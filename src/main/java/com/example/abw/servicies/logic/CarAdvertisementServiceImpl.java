@@ -4,8 +4,12 @@ import com.example.abw.entities.advertisement.Advertisement;
 import com.example.abw.entities.advertisement.CarAdvertisement;
 import com.example.abw.entities.advertisement.image.car.CarImage;
 import com.example.abw.exception.security.PrivacyViolationException;
+import com.example.abw.model.advertisement.Status;
+import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementMapper;
+import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementResponse;
+import com.example.abw.model.currency.Currency;
 import com.example.abw.model.pageable.PageableParams;
-import com.example.abw.model.car_advertisement.CarAdvertisementRequest;
+import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementRequest;
 import com.example.abw.entities.sell_item.car.CarBrand;
 import com.example.abw.entities.user.User;
 import com.example.abw.repositories.advertisement.CarAdvertisementRepository;
@@ -14,14 +18,12 @@ import com.example.abw.security.CustomUserDetails;
 import com.example.abw.security.utils.UserUtil;
 import com.example.abw.servicies.CarAdvertisementService;
 import com.example.abw.servicies.CarBrandService;
+import com.example.abw.servicies.CurrencyExchangeService;
 import com.example.abw.servicies.UserService;
 import com.example.abw.exception.entities.ResourceNotFoundException;
 import com.example.abw.utils.pageable.PageableUtil;
 import com.example.abw.exception.validation.ValidationException;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,11 +41,14 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
     private final UserService userServiceImpl;
     private final CarAdvertisementPaginationRepository carAdvertisementPaginationRepository;
     private final UserUtil userUtil;
+    private final CurrencyExchangeService currencyExchangeService;
+    private final CarAdvertisementMapper carAdvertisementMapper;
 
     public CarAdvertisementServiceImpl(CarAdvertisementRepository carAdvertisementRepository, UserService userServiceImpl,
                                        CarBrandService carBrandServiceImpl,
                                        CarAdvertisementPaginationRepository carAdvertisementPaginationRepository,
-                                       UserUtil userUtil
+                                       UserUtil userUtil, CurrencyExchangeService currencyExchangeService,
+                                       CarAdvertisementMapper carAdvertisementMapper
     ) {
         super(carAdvertisementRepository, CarAdvertisement.class);
         this.carAdvertisementRepository = carAdvertisementRepository;
@@ -51,10 +56,12 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
         this.carBrandServiceImpl = carBrandServiceImpl;
         this.carAdvertisementPaginationRepository = carAdvertisementPaginationRepository;
         this.userUtil = userUtil;
+        this.currencyExchangeService = currencyExchangeService;
+        this.carAdvertisementMapper = carAdvertisementMapper;
     }
 
     @Override
-    public CarAdvertisement createCarAdvertisement(CarAdvertisementRequest carAdvertisementRequest)
+    public CarAdvertisementResponse createCarAdvertisement(CarAdvertisementRequest carAdvertisementRequest)
             throws ValidationException, IOException, ResourceNotFoundException {
         CustomUserDetails customUserDetails = userUtil.getCustomUserDetails();
         User user = userServiceImpl.findByEmail(customUserDetails.getUsername());
@@ -68,7 +75,9 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
             carAd.setCarBrand(carBrand);
             carAd.setDescriptions(carAdvertisementRequest.getDescriptions());
             carAd.setPrice(carAdvertisementRequest.getPrice());
+            carAd.setPriceCurrency(carAdvertisementRequest.getCurrency());
             carAd.setUser(user);
+            carAd.setStatus(Status.ACTIVE);
             carAd = create(carAd);
             for (MultipartFile multipartImage : carAdvertisementRequest.getImages()) {
                 if (multipartImage != null) {
@@ -79,14 +88,14 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
                 }
             }
             carAd.setCarImages(carImages);
-            return create(carAd);
+            return carAdvertisementMapper.carAdvertisementToCarAdvertisementResponse(create(carAd));
         }
         throw new ResourceNotFoundException("user not found");
     }
 
     @Transactional
     @Override
-    public CarAdvertisement updateCarAdvertisement(CarAdvertisementRequest carAdvertisementRequest, long id)
+    public CarAdvertisementResponse updateCarAdvertisement(CarAdvertisementRequest carAdvertisementRequest, long id)
             throws ValidationException, ResourceNotFoundException, PrivacyViolationException {
         CarAdvertisement carAd = findById(id);
         if (userUtil.getCustomUserDetails().getUsername().equals(carAd.getUser().getEmail())) {
@@ -94,8 +103,9 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
             carAd.setCarBrand(carBrand);
             carAd.setDescriptions(carAdvertisementRequest.getDescriptions());
             carAd.setPrice(carAdvertisementRequest.getPrice());
+            carAd.setPriceCurrency(carAdvertisementRequest.getCurrency());
             update(carAd, id);
-            return findById(id);
+            return carAdvertisementMapper.carAdvertisementToCarAdvertisementResponse(findById(id));
         }
         throw new PrivacyViolationException("privacy violation");
 
@@ -103,67 +113,88 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
 
     @Transactional
     @Override
-    public List<Advertisement> findAllByCarBrand(String carBrand, boolean isAdmin, PageableParams pageableParams) {
+    public List<CarAdvertisementResponse> findAllByCarBrand(String carBrand, boolean isAdmin, PageableParams pageableParams) {
         Pageable pageable = PageableUtil.getPageable(pageableParams);
-        if (isAdmin)
-            return new ArrayList<>(carAdvertisementPaginationRepository.findByCarBrand_Name(carBrand, pageable));
-        else return new ArrayList<>(carAdvertisementPaginationRepository
-                .findByCarBrand_NameAndSold(carBrand, false, pageable));
-    }
-
-
-    @Transactional
-    @Override
-    public List<Advertisement> findAllByCarBrandName(String carBrandName, boolean isAdmin, PageableParams pageableParams) {
-        Pageable pageable = PageableUtil.getPageable(pageableParams);
-        if (isAdmin) return new ArrayList<>(carAdvertisementPaginationRepository
-                .findByCarBrand_CarBrandName_Name(carBrandName, pageable));
-        else return new ArrayList<>(carAdvertisementPaginationRepository
-                .findByCarBrand_CarBrandName_NameAndSold(carBrandName, false, pageable));
-    }
-
-    @Transactional
-    @Override
-    public List<Advertisement> findAllByPrice(Long startPrice, Long endPrice, boolean isAdmin, PageableParams pageableParams) {
-        Pageable pageable = PageableUtil.getPageable(pageableParams);
-        if (isAdmin) return new ArrayList<>(carAdvertisementPaginationRepository.
-                readAllByPriceBetween(startPrice, endPrice, pageable));
-        else return new ArrayList<>(carAdvertisementPaginationRepository.
-                readAllByPriceBetweenAndSold(startPrice, endPrice, false, pageable));
-    }
-
-    @Transactional
-    @Override
-    public List<Advertisement> findAllByPriceAndCarBrand(Long startPrice, Long endPrice, String carBrand,
-                                                         boolean isAdmin, PageableParams pageableParams) {
-        Pageable pageable = PageableUtil.getPageable(pageableParams);
+        List<CarAdvertisement> carAdvertisements;
         if (isAdmin) {
-            return new ArrayList<>(carAdvertisementPaginationRepository
-                    .readAllByPriceBetweenAndCarBrand_Name(startPrice, endPrice, carBrand, pageable));
-        } else return new ArrayList<>(carAdvertisementPaginationRepository
-                .readAllByPriceBetweenAndSoldAndCarBrand_Name(startPrice, endPrice,
-                        false, carBrand, pageable));
+            carAdvertisements = carAdvertisementPaginationRepository.findByCarBrand_Name(carBrand, pageable);
+        } else {
+            carAdvertisements = carAdvertisementPaginationRepository
+                    .findByCarBrand_NameAndStatus(carBrand, Status.ACTIVE, pageable);
+        }
+        return getListResponse(pageableParams.getCurrency(), carAdvertisements);
+    }
+
+
+    @Transactional
+    @Override
+    public List<CarAdvertisementResponse> findAllByCarBrandName(String carBrandName,
+                                                                boolean isAdmin, PageableParams pageableParams) {
+        Pageable pageable = PageableUtil.getPageable(pageableParams);
+        List<CarAdvertisement> carAdvertisements;
+        if (isAdmin) {
+            carAdvertisements = carAdvertisementPaginationRepository
+                    .findByCarBrand_CarBrandName_Name(carBrandName, pageable);
+        } else {
+            carAdvertisements = carAdvertisementPaginationRepository
+                    .findByCarBrand_CarBrandName_NameAndStatus(carBrandName, Status.ACTIVE, pageable);
+        }
+        return getListResponse(pageableParams.getCurrency(), carAdvertisements);
     }
 
     @Transactional
     @Override
-    public List<Advertisement> findAllByPriceAndCarBrandName(Long startPrice, Long endPrice, String carBrandName,
-                                                             boolean isAdmin, PageableParams pageableParams) {
+    public List<CarAdvertisementResponse> findAllByPrice(
+            Long startPrice, Long endPrice, boolean isAdmin, PageableParams pageableParams) {
         Pageable pageable = PageableUtil.getPageable(pageableParams);
-        if (isAdmin) return new ArrayList<>(carAdvertisementPaginationRepository
+        List<CarAdvertisement> carAdvertisements;
+        if (isAdmin) carAdvertisements = carAdvertisementPaginationRepository.
+                readAllByPriceBetween(startPrice, endPrice, pageable);
+        else carAdvertisements = carAdvertisementPaginationRepository.
+                readAllByPriceBetweenAndStatus(startPrice, endPrice, Status.ACTIVE, pageable);
+        return getListResponse(pageableParams.getCurrency(), carAdvertisements);
+    }
+
+    @Transactional
+    @Override
+    public List<CarAdvertisementResponse> findAllByPriceAndCarBrand(Long startPrice, Long endPrice, String carBrand,
+                                                                    boolean isAdmin, PageableParams pageableParams) {
+        Pageable pageable = PageableUtil.getPageable(pageableParams);
+        List<CarAdvertisement> carAdvertisements;
+        if (isAdmin) {
+            carAdvertisements = carAdvertisementPaginationRepository
+                    .readAllByPriceBetweenAndCarBrand_Name(startPrice, endPrice, carBrand, pageable);
+        } else carAdvertisements = carAdvertisementPaginationRepository
+                .readAllByPriceBetweenAndStatusAndCarBrand_Name(
+                        startPrice, endPrice, Status.ACTIVE, carBrand, pageable);
+        return getListResponse(pageableParams.getCurrency(), carAdvertisements);
+    }
+
+    @Transactional
+    @Override
+    public List<CarAdvertisementResponse> findAllByPriceAndCarBrandName(Long startPrice, Long endPrice,
+                                                                        String carBrandName,
+                                                                        boolean isAdmin,
+                                                                        PageableParams pageableParams) {
+        Pageable pageable = PageableUtil.getPageable(pageableParams);
+        List<CarAdvertisement> carAdvertisements;
+        if (isAdmin) carAdvertisements = carAdvertisementPaginationRepository
                 .readAllByPriceBetweenAndCarBrand_CarBrandName_Name(startPrice, endPrice,
-                        carBrandName, pageable));
-        else return new ArrayList<>(carAdvertisementPaginationRepository
-                .readAllByPriceBetweenAndSoldAndCarBrand_CarBrandName_Name(startPrice, endPrice,
-                        false, carBrandName, pageable));
+                        carBrandName, pageable);
+        else carAdvertisements = carAdvertisementPaginationRepository
+                .readAllByPriceBetweenAndStatusAndCarBrand_CarBrandName_Name(startPrice, endPrice,
+                        Status.ACTIVE, carBrandName, pageable);
+        return getListResponse(pageableParams.getCurrency(), carAdvertisements);
     }
 
     @Transactional
     @Override
-    public List<Advertisement> findAll(boolean isAdmin, PageableParams pageableParams) {
+    public List<CarAdvertisementResponse> findAll(boolean isAdmin, PageableParams pageableParams) {
         Pageable pageable = PageableUtil.getPageable(pageableParams);
-        if (isAdmin) return findAllCarAdvertisements(pageable);
-        return new ArrayList<>(carAdvertisementPaginationRepository.readAllBySold(false, pageable));
+        List<CarAdvertisement> carAdvertisements;
+        if (isAdmin) carAdvertisements = findAllCarAdvertisements(pageable);
+        else carAdvertisements = carAdvertisementPaginationRepository.readAllByStatus(Status.ACTIVE);
+        return getListResponse(pageableParams.getCurrency(), carAdvertisements);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -172,7 +203,7 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
             throws ResourceNotFoundException, ValidationException, PrivacyViolationException {
         CarAdvertisement carAdvertisement = findById(id);
         if (userUtil.getCustomUserDetails().getUsername().equals(carAdvertisement.getUser().getEmail())) {
-            carAdvertisement.setSold(true);
+            carAdvertisement.setStatus(Status.SOLD);
             Date date = new Date();
             Timestamp endPublicationDate = new Timestamp(date.getTime());
             carAdvertisement.setEndPublicationDate(endPublicationDate);
@@ -182,35 +213,45 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
 
 
     @Override
-    public CarAdvertisement findAdvertisement(long advertisementId) throws ResourceNotFoundException {
+    public CarAdvertisementResponse findAdvertisement(long advertisementId, Currency currency)
+            throws ResourceNotFoundException {
         CarAdvertisement carAdvertisement = findById(advertisementId);
-        if (carAdvertisement.isSold()) throw new ResourceNotFoundException("advertisement not found");
-        return carAdvertisement;
+        if (carAdvertisement.getStatus().equals(Status.ACTIVE)) {
+            CarAdvertisementResponse carAdvertisementResponse = carAdvertisementMapper
+                    .carAdvertisementToCarAdvertisementResponse(carAdvertisement);
+            carAdvertisementResponse.setPriceCurrency(currency);
+            carAdvertisementResponse.setPrice(currencyExchangeService.getPrice(
+                    carAdvertisement.getPriceCurrency(), currency, carAdvertisement.getPrice()));
+            return carAdvertisementResponse;
+        }
+        throw new ResourceNotFoundException("advertisement not found");
     }
 
     @Override
-    public CarAdvertisement findUserAdvertisement(long advertisementId)
+    public CarAdvertisementResponse findUserAdvertisement(long advertisementId)
             throws ResourceNotFoundException, PrivacyViolationException {
         CarAdvertisement carAdvertisement = findById(advertisementId);
         if (userUtil.getCustomUserDetails().getUsername().equals(carAdvertisement.getUser().getEmail()))
-            return carAdvertisement;
+            return carAdvertisementMapper.carAdvertisementToCarAdvertisementResponse(carAdvertisement);
         throw new PrivacyViolationException("privacy violation");
     }
 
     @Transactional
     @Override
-    public List<CarAdvertisement> findAllByUser(PageableParams pageableParams) throws ResourceNotFoundException {
+    public List<CarAdvertisementResponse> findAllByUser(PageableParams pageableParams) throws ResourceNotFoundException {
         Pageable pageable = PageableUtil.getPageable(pageableParams);
         CustomUserDetails customUserDetails = userUtil.getCustomUserDetails();
         if (customUserDetails != null) {
             User user = userServiceImpl.findByEmail(customUserDetails.getUsername());
-            return carAdvertisementPaginationRepository.readAllByUser(user, pageable);
+            List<CarAdvertisement> carAdvertisements =
+                    carAdvertisementPaginationRepository.readAllByUser(user, pageable);
+            return getListResponse(pageableParams.getCurrency(), carAdvertisements);
         }
         throw new ResourceNotFoundException("user not found");
     }
 
     @Override
-    public CarAdvertisement refreshCarAdvertisement(long advertisementId)
+    public CarAdvertisementResponse refreshCarAdvertisement(long advertisementId)
             throws ResourceNotFoundException, PrivacyViolationException {
         CarAdvertisement carAdvertisement = findById(advertisementId);
         if (userUtil.getCustomUserDetails().getUsername().equals(carAdvertisement.getUser().getEmail())) {
@@ -218,8 +259,10 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
             Timestamp currentTime = new Timestamp(date.getTime());
             carAdvertisement.setPublicationDate(currentTime);
             carAdvertisement.setEndPublicationDate(null);
-            carAdvertisement.setSold(false);
-            return carAdvertisementRepository.save(carAdvertisement);
+            carAdvertisement.setStatus(Status.ACTIVE);
+            return carAdvertisementMapper.carAdvertisementToCarAdvertisementResponse(
+                    carAdvertisementRepository.save(carAdvertisement)
+            );
         }
         throw new PrivacyViolationException("privacy violation");
     }
@@ -232,11 +275,24 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
         }
     }
 
-    private List<Advertisement> findAllCarAdvertisements(Pageable pageable) {
-        List<Advertisement> result = new ArrayList<>();
+    private List<CarAdvertisement> findAllCarAdvertisements(Pageable pageable) {
+        List<CarAdvertisement> result = new ArrayList<>();
         Iterable<CarAdvertisement> iterable = carAdvertisementPaginationRepository.findAll(pageable);
         Iterator<CarAdvertisement> iterator = iterable.iterator();
         if (iterator.hasNext()) iterator.forEachRemaining(result::add);
         return result;
+    }
+
+    private List<CarAdvertisementResponse> getListResponse(
+            Currency currencyTo, List<CarAdvertisement> carAdvertisements) {
+        List<CarAdvertisementResponse> carAdvertisementResponses =
+                carAdvertisementMapper.toCarAdvertisementResponse(carAdvertisements);
+        for (CarAdvertisementResponse carAdvertisementResponse : carAdvertisementResponses) {
+            carAdvertisementResponse.setPrice(
+                    currencyExchangeService.getPrice(carAdvertisementResponse.getPriceCurrency(), currencyTo,
+                            carAdvertisementResponse.getPrice()));
+            carAdvertisementResponse.setPriceCurrency(currencyTo);
+        }
+        return carAdvertisementResponses;
     }
 }

@@ -6,6 +6,8 @@ import com.example.abw.entities.advertisement.image.car.CarImage;
 import com.example.abw.entities.sell_item.SellItem;
 import com.example.abw.entities.sell_item.car.CarBrand;
 import com.example.abw.entities.user.User;
+import com.example.abw.model.advertisement.Status;
+import com.example.abw.model.currency.Currency;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -48,9 +50,6 @@ public class CarAdvertisement implements Serializable, Advertisement {
     private Timestamp endPublicationDate;
 
 
-    @Column(columnDefinition = "boolean default false")
-    private boolean sold;
-
     @Size(max = 1000, message = "max symbols in description is 1000")
     @Column(columnDefinition = "varchar(1000)")
     private String descriptions;
@@ -59,6 +58,14 @@ public class CarAdvertisement implements Serializable, Advertisement {
     @ToString.Exclude
     @OneToMany(mappedBy = "carAd", fetch = FetchType.EAGER)
     private Set<CarImage> carImages;
+
+    @NotNull(message = "status must not be null")
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    @NotNull(message = "currency must not be null")
+    @Enumerated(EnumType.STRING)
+    private Currency priceCurrency;
 
     @Override
     public SellItem getSellItem() {
