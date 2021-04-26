@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Data
@@ -12,7 +13,7 @@ import java.util.Set;
 public class CarAdvertisementDTOAdd {
    // private long userId;
     private long carBrandId;
-    private long price;
+    private BigDecimal price;
     private String descriptions;
     private Set<MultipartFile> images;
     private Currency currency;

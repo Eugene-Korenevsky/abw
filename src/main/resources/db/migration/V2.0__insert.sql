@@ -31,49 +31,46 @@ INSERT INTO public.car_brand(name, car_brand_name_id)
 	VALUES ('golf', 2);
 
 INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
-	VALUES (300000, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
+	VALUES (3000.56, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
 
 INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
-    VALUES (320000, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
+    VALUES (3200.00, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
 
 INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
-    VALUES (400000, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
+    VALUES (4000.00, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
 
 INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
-    VALUES (530000, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
+    VALUES (5300.00, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
 
 INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
-    VALUES (320000, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
+    VALUES (3200.00, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
 
 INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
-    VALUES (320000, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
+    VALUES (3200.00, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
 
 INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
-    VALUES (323000, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
+    VALUES (3230.99, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
 
 INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
-    VALUES (312000, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
+    VALUES (3120.00, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
 
 INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
-    VALUES (3340000, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
+    VALUES (33400.00, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
 
 INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
-    VALUES (323000, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
+    VALUES (3230.00, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
 
 INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
-    VALUES (3007000, 1, 'very good car', 1, '2021-03-16 21:38:09.169','ACTIVE', 'BYN');
+    VALUES (3007.00, 1, 'very good car', 1, '2021-03-16 21:38:09.169','ACTIVE', 'BYN');
 
 INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
-    VALUES (3000300, 1, 'very good car', 1, '2021-03-16 21:38:09.169','ACTIVE', 'BYN');
+    VALUES (3003.00, 1, 'very good car', 1, '2021-03-16 21:38:09.169','ACTIVE', 'BYN');
 
 INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
-    VALUES (3003000, 1, 'very good car', 1, '2021-03-16 21:38:09.169','ACTIVE', 'BYN');
+    VALUES (3003.00, 1, 'very good car', 1, '2021-03-16 21:38:09.169','ACTIVE', 'BYN');
 
 INSERT INTO public.currency_exchange(currency_main, currency_to, value)
 	VALUES ('BYN', 'RUB', 30.34);
-
-INSERT INTO public.currency_exchange(currency_main, currency_to, value)
-	VALUES ('BYN', 'BYN', 1.0);
 
 INSERT INTO public.currency_exchange(currency_main, currency_to, value)
 	VALUES ('BYN', 'EUR', 3.10);
@@ -83,9 +80,6 @@ INSERT INTO public.currency_exchange(currency_main, currency_to, value)
 
 INSERT INTO public.currency_exchange(currency_main, currency_to, value)
 	VALUES ('BYN', 'UAH', 10.75);
-
-INSERT INTO public.currency_exchange(currency_main, currency_to, value)
-	VALUES ('RUB', 'RUB', 1.0);
 
 INSERT INTO public.currency_exchange(currency_main, currency_to, value)
 	VALUES ('RUB', 'BYN', 0.04);
@@ -109,9 +103,6 @@ INSERT INTO public.currency_exchange(currency_main, currency_to, value)
 	VALUES ('USD', 'EUR', 1.10);
 
 INSERT INTO public.currency_exchange(currency_main, currency_to, value)
-	VALUES ('USD', 'USD', 1.0);
-
-INSERT INTO public.currency_exchange(currency_main, currency_to, value)
 	VALUES ('USD', 'UAH', 0.10);
 
 INSERT INTO public.currency_exchange(currency_main, currency_to, value)
@@ -119,9 +110,6 @@ INSERT INTO public.currency_exchange(currency_main, currency_to, value)
 
 INSERT INTO public.currency_exchange(currency_main, currency_to, value)
 	VALUES ('EUR', 'BYN', 3.10);
-
-INSERT INTO public.currency_exchange(currency_main, currency_to, value)
-	VALUES ('EUR', 'EUR', 1.0);
 
 INSERT INTO public.currency_exchange(currency_main, currency_to, value)
 	VALUES ('EUR', 'USD', 0.92);
@@ -140,6 +128,3 @@ INSERT INTO public.currency_exchange(currency_main, currency_to, value)
 
 INSERT INTO public.currency_exchange(currency_main, currency_to, value)
 	VALUES ('UAH', 'USD', 10.52);
-
-INSERT INTO public.currency_exchange(currency_main, currency_to, value)
-	VALUES ('UAH', 'UAH', 1.0);

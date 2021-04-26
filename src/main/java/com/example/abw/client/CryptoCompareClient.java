@@ -20,7 +20,7 @@ public class CryptoCompareClient {
 
     public Map<String, Double> getCurrencyExchanges(Currency currency) {
         String resourceUrl = appProperties.getCryptoCompareUrl() + (currency) + appProperties.getCryptoCompareTo()
-                + currencyUtil.getCurrencyString() + appProperties.getCryptoCompareKey();
+                + currencyUtil.getCurrencyString(currency) + appProperties.getCryptoCompareKey();
         return restTemplate.getForObject(resourceUrl, Map.class);
     }
 }

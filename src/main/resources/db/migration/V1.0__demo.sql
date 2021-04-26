@@ -38,7 +38,7 @@ create table if not exists car_brand(
 
 create table if not exists car_ad(
     id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
-        price bigint NOT NULL,
+        price numeric(19,2) NOT NULL,
         user_id bigint NOT NULL,
         descriptions character varying(1000) COLLATE pg_catalog."default",
         car_brand_id bigint NOT NULL,

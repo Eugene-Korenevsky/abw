@@ -7,6 +7,7 @@ import com.example.abw.entities.user.User;
 import com.example.abw.model.advertisement.Status;
 import com.example.abw.model.currency.Currency;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Set;
 
@@ -21,9 +22,9 @@ public interface Advertisement {
 
     public void sellItem(SellItem sellItem);
 
-    public long getPrice();
+    public BigDecimal getPrice();
 
-    public void setPrice(long price);
+    public void setPrice(BigDecimal price);
 
     public String getDescriptions();
 

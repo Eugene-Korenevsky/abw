@@ -7,6 +7,7 @@ import com.example.abw.model.currency.Currency;
 import com.example.abw.model.user.UserDTO;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Set;
 
@@ -15,7 +16,7 @@ public class CarAdvertisementResponse {
     private long id;
     private CarBrand carBrand;
     private UserDTO userDTO;
-    private long price;
+    private BigDecimal price;
     private Currency priceCurrency;
     private String description;
     private Timestamp publicationDate;

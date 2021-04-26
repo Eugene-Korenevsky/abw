@@ -7,11 +7,11 @@ import java.util.EnumSet;
 
 @Component
 public class CurrencyUtil {
-    public String getCurrencyString() {
+    public String getCurrencyString(Currency currentCurrency) {
         StringBuilder stringBuilder = new StringBuilder();
         EnumSet<Currency> currencies = EnumSet.allOf(Currency.class);
-        for (Currency cur : currencies) {
-            stringBuilder.append((cur)).append(",");
+        for (Currency currency : currencies) {
+            if (!currency.equals(currentCurrency)) stringBuilder.append((currency)).append(",");
         }
         int last = stringBuilder.lastIndexOf(",");
         return stringBuilder.substring(0, last);

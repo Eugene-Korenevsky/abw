@@ -21,38 +21,27 @@ public class CurrencyExchangeServiceImpl extends GenericServiceImpl<CurrencyExch
     }
 
     @Override
-    public long getPrice(Currency main, Currency currencyTo, long price) {
+    public BigDecimal getPrice(Currency main, Currency currencyTo, BigDecimal price) {
+        if (main.equals(currencyTo)) return price;
         CurrencyExchange currencyExchange = currencyExRepository.findByCurrencyMainAndCurrencyTo(main, currencyTo);
-        double exchangePrice = currencyExchange.getValue().doubleValue();
-        long exchange = (long) (exchangePrice * 10000);
-        long res = price * exchange;
-        return res / 10000;
+        return currencyExchange.getValue().multiply(price);
     }
 
     @Override
     public void updateCurrencyExchanges(Map<String, Double> jsonResource, Currency currency) {
         EnumSet<Currency> currencies = EnumSet.allOf(Currency.class);
-        for (Currency currency1 : currencies) {
-            if (currency.equals(currency1)) {
-                CurrencyExchange currencyExchange = currencyExRepository.findByCurrencyMainAndCurrencyTo(currency, currency1);
+        for (Currency currentCurrency : currencies) {
+            if (!currency.equals(currentCurrency)) {
+                CurrencyExchange currencyExchange = currencyExRepository.
+                        findByCurrencyMainAndCurrencyTo(currency, currentCurrency);
                 if (currencyExchange == null) {
                     currencyExchange = new CurrencyExchange();
                     currencyExchange.setCurrencyMain(currency);
-                    currencyExchange.setCurrencyTo(currency1);
+                    currencyExchange.setCurrencyTo(currentCurrency);
                 }
-                currencyExchange.setValue(BigDecimal.valueOf(1));
-                currencyExRepository.save(currencyExchange);
-            } else {
-                CurrencyExchange currencyExchange = currencyExRepository.findByCurrencyMainAndCurrencyTo(currency, currency1);
-                if (currencyExchange == null) {
-                    currencyExchange = new CurrencyExchange();
-                    currencyExchange.setCurrencyMain(currency);
-                    currencyExchange.setCurrencyTo(currency1);
-                }
-                currencyExchange.setValue(BigDecimal.valueOf(jsonResource.get(String.valueOf(currency1))));
+                currencyExchange.setValue(BigDecimal.valueOf(jsonResource.get(String.valueOf(currentCurrency))));
                 currencyExRepository.save(currencyExchange);
             }
-
         }
     }
 }

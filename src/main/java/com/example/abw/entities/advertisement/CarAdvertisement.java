@@ -17,6 +17,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Set;
 
@@ -42,7 +43,7 @@ public class CarAdvertisement implements Serializable, Advertisement {
 
     @NotNull(message = "carAd price must not be null")
     @Min(value = 1, message = "min price value must be 1")
-    private long price;
+    private BigDecimal price;
 
     @NotNull(message = "carAd publicationDate must not be null")
     private Timestamp publicationDate;
