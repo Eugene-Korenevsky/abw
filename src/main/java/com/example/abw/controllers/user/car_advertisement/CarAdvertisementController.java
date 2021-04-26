@@ -1,9 +1,7 @@
 package com.example.abw.controllers.user.car_advertisement;
 
-import com.example.abw.entities.advertisement.Advertisement;
-import com.example.abw.entities.advertisement.CarAdvertisement;
 import com.example.abw.exception.security.PrivacyViolationException;
-import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementRequest;
+import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementDTOAdd;
 import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementResponse;
 import com.example.abw.model.pageable.PageableParams;
 import com.example.abw.servicies.CarAdvertisementService;
@@ -41,10 +39,10 @@ public class CarAdvertisementController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateAd(@RequestBody CarAdvertisementRequest carAdvertisementRequest,
+    public ResponseEntity<?> updateAd(@RequestBody CarAdvertisementDTOAdd carAdvertisementDTOAdd,
                                       @PathVariable("id") long id) throws ResourceNotFoundException,
             ValidationException, PrivacyViolationException {
-        CarAdvertisementResponse carAd = carAdvertisementService.updateCarAdvertisement(carAdvertisementRequest, id);
+        CarAdvertisementResponse carAd = carAdvertisementService.updateCarAdvertisement(carAdvertisementDTOAdd, id);
         return new ResponseEntity<>(carAd, HttpStatus.OK);
     }
 
@@ -56,9 +54,9 @@ public class CarAdvertisementController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createAd(@RequestBody CarAdvertisementRequest carAdvertisementRequest)
+    public ResponseEntity<?> createAd(@RequestBody CarAdvertisementDTOAdd carAdvertisementDTOAdd)
             throws ValidationException, IOException, ResourceNotFoundException, PrivacyViolationException {
-        CarAdvertisementResponse carAdvertisement = carAdvertisementService.createCarAdvertisement(carAdvertisementRequest);
+        CarAdvertisementResponse carAdvertisement = carAdvertisementService.createCarAdvertisement(carAdvertisementDTOAdd);
         return new ResponseEntity<>(carAdvertisement, HttpStatus.OK);
     }
 }

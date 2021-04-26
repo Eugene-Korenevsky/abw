@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Data
 @EqualsAndHashCode
-public class CarAdvertisementRequest {
+public class CarAdvertisementDTOAdd {
    // private long userId;
     private long carBrandId;
     private long price;

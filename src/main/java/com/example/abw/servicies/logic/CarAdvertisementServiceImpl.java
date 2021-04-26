@@ -1,6 +1,5 @@
 package com.example.abw.servicies.logic;
 
-import com.example.abw.entities.advertisement.Advertisement;
 import com.example.abw.entities.advertisement.CarAdvertisement;
 import com.example.abw.entities.advertisement.image.car.CarImage;
 import com.example.abw.exception.security.PrivacyViolationException;
@@ -9,7 +8,7 @@ import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementMap
 import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementResponse;
 import com.example.abw.model.currency.Currency;
 import com.example.abw.model.pageable.PageableParams;
-import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementRequest;
+import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementDTOAdd;
 import com.example.abw.entities.sell_item.car.CarBrand;
 import com.example.abw.entities.user.User;
 import com.example.abw.repositories.advertisement.CarAdvertisementRepository;
@@ -61,7 +60,7 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
     }
 
     @Override
-    public CarAdvertisementResponse createCarAdvertisement(CarAdvertisementRequest carAdvertisementRequest)
+    public CarAdvertisementResponse createCarAdvertisement(CarAdvertisementDTOAdd carAdvertisementDTOAdd)
             throws ValidationException, IOException, ResourceNotFoundException {
         CustomUserDetails customUserDetails = userUtil.getCustomUserDetails();
         User user = userServiceImpl.findByEmail(customUserDetails.getUsername());
@@ -70,16 +69,16 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
             CarAdvertisement carAd = new CarAdvertisement();
             Date date = new Date();
             Timestamp timestamp = new Timestamp(date.getTime());
-            CarBrand carBrand = findCarBrand(carAdvertisementRequest.getCarBrandId());
+            CarBrand carBrand = findCarBrand(carAdvertisementDTOAdd.getCarBrandId());
             carAd.setPublicationDate(timestamp);
             carAd.setCarBrand(carBrand);
-            carAd.setDescriptions(carAdvertisementRequest.getDescriptions());
-            carAd.setPrice(carAdvertisementRequest.getPrice());
-            carAd.setPriceCurrency(carAdvertisementRequest.getCurrency());
+            carAd.setDescriptions(carAdvertisementDTOAdd.getDescriptions());
+            carAd.setPrice(carAdvertisementDTOAdd.getPrice());
+            carAd.setPriceCurrency(carAdvertisementDTOAdd.getCurrency());
             carAd.setUser(user);
             carAd.setStatus(Status.ACTIVE);
             carAd = create(carAd);
-            for (MultipartFile multipartImage : carAdvertisementRequest.getImages()) {
+            for (MultipartFile multipartImage : carAdvertisementDTOAdd.getImages()) {
                 if (multipartImage != null) {
                     CarImage carImage = new CarImage();
                     carImage.setContentImage(multipartImage.getBytes());
@@ -95,15 +94,15 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
 
     @Transactional
     @Override
-    public CarAdvertisementResponse updateCarAdvertisement(CarAdvertisementRequest carAdvertisementRequest, long id)
+    public CarAdvertisementResponse updateCarAdvertisement(CarAdvertisementDTOAdd carAdvertisementDTOAdd, long id)
             throws ValidationException, ResourceNotFoundException, PrivacyViolationException {
         CarAdvertisement carAd = findById(id);
         if (userUtil.getCustomUserDetails().getUsername().equals(carAd.getUser().getEmail())) {
-            CarBrand carBrand = findCarBrand(carAdvertisementRequest.getCarBrandId());
+            CarBrand carBrand = findCarBrand(carAdvertisementDTOAdd.getCarBrandId());
             carAd.setCarBrand(carBrand);
-            carAd.setDescriptions(carAdvertisementRequest.getDescriptions());
-            carAd.setPrice(carAdvertisementRequest.getPrice());
-            carAd.setPriceCurrency(carAdvertisementRequest.getCurrency());
+            carAd.setDescriptions(carAdvertisementDTOAdd.getDescriptions());
+            carAd.setPrice(carAdvertisementDTOAdd.getPrice());
+            carAd.setPriceCurrency(carAdvertisementDTOAdd.getCurrency());
             update(carAd, id);
             return carAdvertisementMapper.carAdvertisementToCarAdvertisementResponse(findById(id));
         }

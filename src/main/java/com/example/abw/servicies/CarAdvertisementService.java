@@ -1,13 +1,12 @@
 package com.example.abw.servicies;
 
 
-import com.example.abw.entities.advertisement.Advertisement;
 import com.example.abw.entities.advertisement.CarAdvertisement;
 import com.example.abw.exception.security.PrivacyViolationException;
 import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementResponse;
 import com.example.abw.model.currency.Currency;
 import com.example.abw.model.pageable.PageableParams;
-import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementRequest;
+import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementDTOAdd;
 import com.example.abw.exception.entities.ResourceNotFoundException;
 import com.example.abw.exception.validation.ValidationException;
 
@@ -15,10 +14,10 @@ import java.io.IOException;
 import java.util.List;
 
 public interface CarAdvertisementService extends GenericService<CarAdvertisement> {
-    public CarAdvertisementResponse createCarAdvertisement(CarAdvertisementRequest carAdvertisementRequest)
+    public CarAdvertisementResponse createCarAdvertisement(CarAdvertisementDTOAdd carAdvertisementDTOAdd)
             throws ValidationException, IOException, ResourceNotFoundException, PrivacyViolationException;
 
-    public CarAdvertisementResponse updateCarAdvertisement(CarAdvertisementRequest carAdvertisementRequest, long id)
+    public CarAdvertisementResponse updateCarAdvertisement(CarAdvertisementDTOAdd carAdvertisementDTOAdd, long id)
             throws ValidationException, ResourceNotFoundException, PrivacyViolationException;
 
     public CarAdvertisementResponse findAdvertisement(long advertisementId, Currency currency)

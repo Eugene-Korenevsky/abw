@@ -1,6 +1,7 @@
 package com.example.abw.servicies.business_processors;
 
 import com.example.abw.AppProperties;
+import com.example.abw.client.CryptoCompareClient;
 import com.example.abw.model.currency.Currency;
 import com.example.abw.servicies.CurrencyExchangeService;
 import com.example.abw.utils.currency.CurrencyUtil;
@@ -23,16 +24,16 @@ public class CurrencyExchangeUpdater {
     private RestTemplate restTemplate;
     @Autowired
     private CurrencyExchangeService currencyExchangeService;
+    @Autowired
+    private CryptoCompareClient cryptoCompareClient;
 
 
     @Scheduled(fixedRate = 86400000)
     public void updateCurrencyExchange() {
         EnumSet<Currency> currencies = EnumSet.allOf(Currency.class);
-       /* for (Currency currency : currencies) {
-            String resourceUrl = appProperties.getCryptoCompareUrl() + (currency) + appProperties.getCryptoCompareTo()
-                    + currencyUtil.getCurrencyString() + appProperties.getCryptoCompareKey();
-            Map<String, Double> jsonResource = restTemplate.getForObject(resourceUrl, Map.class);
+        for (Currency currency : currencies) {
+            Map<String, Double> jsonResource = cryptoCompareClient.getCurrencyExchanges(currency);
             currencyExchangeService.updateCurrencyExchanges(jsonResource, currency);
-        }*/
+        }
     }
 }
