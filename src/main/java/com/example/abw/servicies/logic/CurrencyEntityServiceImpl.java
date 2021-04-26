@@ -8,7 +8,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.EnumSet;
-import java.util.List;
 
 @Service
 public class CurrencyEntityServiceImpl extends GenericServiceImpl<CurrencyEntity> implements CurrencyEntityService {
@@ -28,14 +27,6 @@ public class CurrencyEntityServiceImpl extends GenericServiceImpl<CurrencyEntity
                 CurrencyEntity newCurrencyEntity = new CurrencyEntity();
                 newCurrencyEntity.setCurrency(currency);
                 currencyEntityRepository.save(newCurrencyEntity);
-            }
-        }
-        List<CurrencyEntity> currencyEntities = findAll();
-        for (CurrencyEntity currencyEntity : currencyEntities) {
-            try {
-                Currency currency = currencyEntity.getCurrency();
-            } catch (IllegalArgumentException e) {
-                currencyEntityRepository.deleteById(currencyEntity.getId());
             }
         }
     }

@@ -33,20 +33,13 @@ public class CurrencyExchangeServiceImpl extends GenericServiceImpl<CurrencyEnti
         CurrencyExchange currencyExchange = currencyExchangeRepository.
                 findByCurrencyEntityMainAndCurrencyEntityTo(currencyEntityMain, currencyEntityTo);
         double exchangePrice = currencyExchange.getValue();
-        if (exchangePrice > 1) {
-            System.out.println(exchangePrice);
+        if (exchangePrice >= 1) {
             long exchange = (long) (exchangePrice * 10000);
-            System.out.println(exchange);
             long res = price * exchange;
-            System.out.println(res);
-            System.out.println(res / 100);
             return res / 100;
         } else {
             long exchange = (long) (exchangePrice * 100000);
-            System.out.println(exchange);
             long res = price * exchange;
-            System.out.println(res);
-            System.out.println(res / 100000);
             return res / 100000;
         }
 

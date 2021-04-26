@@ -30,7 +30,8 @@ public class CurrencyExchangeUpdater {
     @Scheduled(fixedRate = 86400000)
     public void updateCurrencyExchange() {
         EnumSet<Currency> currencies = EnumSet.allOf(Currency.class);
-       for (Currency currency : currencies) {
+        currencyEntityService.updateAppCurrencies();
+        for (Currency currency : currencies) {
             String resourceUrl = appProperties.getCryptoCompareUrl() + (currency) + appProperties.getCryptoCompareTo()
                     + currencyUtil.getCurrencyString() + appProperties.getCryptoCompareKey();
             Map jsonResource = restTemplate.getForObject(resourceUrl, Map.class);
