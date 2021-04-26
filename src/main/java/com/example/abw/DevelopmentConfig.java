@@ -25,23 +25,10 @@ public class DevelopmentConfig {
 
     @Bean
     public CommandLineRunner dataLoader(
-            UserService userServiceImpl,
-            JwtProvider jwtProvider,
-            CurrencyExchangeRepository currencyExchangeRepository,
-            ActiveCarAdvertisements activeCarAdvertisements,
-            CarAdvertisementRepository carAdvertisementRepository,
-            CarAdvertisementService carAdvertisementService,
-            AppProperties appProperties,
-            CurrencyUtil currencyUtil,
-            CurrencyEntityRepository currencyEntityRepository,
-            CarAdvertisementMapper carAdvertisementMapper,
-            CurrencyExchangeService currencyExchangeService
+           
     ) {
         return args -> {
-            List<CarAdvertisement> carAdvertisements = carAdvertisementService.findAll();
-            CarAdvertisement carAdvertisement = carAdvertisementService.findById(4L);
-            System.out.println(currencyExchangeService.getPrice(
-                    Currency.BYN, Currency.USD, carAdvertisement.getPrice()));
+
 
 
         };
