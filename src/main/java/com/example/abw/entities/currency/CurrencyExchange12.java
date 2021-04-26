@@ -3,29 +3,28 @@ package com.example.abw.entities.currency;
 import com.example.abw.model.currency.Currency;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Set;
+import java.math.BigDecimal;
 
 @Data
 @Entity
-@Table(name = "currency")
-@EqualsAndHashCode(exclude = {"currencyExchanges"})
-public class CurrencyEntity {
-
+@EqualsAndHashCode
+@Table(name = "currency_exchange12")
+public class CurrencyExchange12 {
     @Id
     @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
-    private Currency currency;
+    private Currency currencyMain;
 
-    @ToString.Exclude
-    @OneToMany(mappedBy = "currencyEntityMain", fetch = FetchType.EAGER)
-    public Set<CurrencyExchange> currencyExchanges;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Currency currencyTo;
 
-
+    private BigDecimal value;
 }

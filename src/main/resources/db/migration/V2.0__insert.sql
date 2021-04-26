@@ -1,16 +1,16 @@
 INSERT INTO public.user_role(role)
-	VALUES ('user');
+	VALUES ('USER');
 INSERT INTO public.user_role(role)
-	VALUES ('administration');
+	VALUES ('ADMIN');
 
 INSERT INTO public.user_info(name, role_id, email, password, phone_number)
-	VALUES ('Eugene', 1, 'kara-91@tut.by', 'kara', '+375297320231');
+	VALUES ('Eugene', 1, 'kara-91@tut.by', '$2a$10$nmYkvdXJEJ3T/iSEpHUoauUFqDAvSZWS8icXsLOi.ZYYQdXCkThfO', '+375297320231');
 
 INSERT INTO public.user_info(name, role_id, email, password, phone_number)
-	VALUES ('Vladimir', 1, 'vova@tut.by', 'vovan', '+375295325531');
+	VALUES ('Vladimir', 1, 'vova@tut.by', '$2a$10$nmYkvdXJEJ3T/iSEpHUoauUFqDAvSZWS8icXsLOi.ZYYQdXCkThfO', '+375295325531');
 
 INSERT INTO public.user_info(name, role_id, email, password, phone_number)
-	VALUES ('Admin', 2, 'admin@tut.by', 'admin', '+375297325531');
+	VALUES ('Admin', 2, 'admin@tut.by', '$2a$10$nmYkvdXJEJ3T/iSEpHUoauUFqDAvSZWS8icXsLOi.ZYYQdXCkThfO', '+375297325531');
 
 INSERT INTO public.car_brand_name(name)
 	VALUES ('Audi');
@@ -30,95 +30,116 @@ INSERT INTO public.car_brand(name, car_brand_name_id)
 INSERT INTO public.car_brand(name, car_brand_name_id)
 	VALUES ('golf', 2);
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (300000, false, 1, 'very good car', 1, '2021-03-16 21:38:09.169' );
+INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
+	VALUES (300000, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (310000, false, 1, 'very good car', 1, '2021-03-16 22:38:09.169' );
+INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
+    VALUES (320000, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (314000, false, 1, 'very good car', 1, '2021-03-16 23:38:09.169' );
+INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
+    VALUES (400000, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (320000, false, 1, 'very good car', 1, '2021-03-16 16:38:09.169' );
+INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
+    VALUES (530000, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (330000, true, 1, 'very good car', 1, '2021-03-16 17:38:09.169' );
+INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
+    VALUES (320000, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (340000, true, 1, 'very good car', 3, '2021-03-16 21:35:09.169' );
+INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
+    VALUES (320000, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (350000, false, 2, 'very good car', 2, '2021-03-16 23:38:09.169' );
+INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
+    VALUES (323000, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (360000, false, 2, 'very good car', 2, '2021-03-16 23:38:09.169' );
+INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
+    VALUES (312000, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (370000, true, 2, 'very good car', 1, '2021-03-14 19:28:09.169' );
+INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
+    VALUES (3340000, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (380000, false, 2, 'very good car', 1, '2021-03-14 18:38:09.169' );
+INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
+    VALUES (323000, 1, 'very good car', 1, '2021-04-25 21:38:09.169','ACTIVE', 'BYN');
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (390000, false, 2, 'very good car', 1, '2021-03-14 16:38:09.169' );
+INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
+    VALUES (3007000, 1, 'very good car', 1, '2021-03-16 21:38:09.169','ACTIVE', 'BYN');
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (400000, false, 2, 'very good car', 2, '2021-03-14 20:38:09.169' );
+INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
+    VALUES (3000300, 1, 'very good car', 1, '2021-03-16 21:38:09.169','ACTIVE', 'BYN');
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (410000, false, 2, 'very good car', 2, '2021-03-14 21:38:09.169' );
+INSERT INTO public.car_ad(price,user_id, descriptions, car_brand_id, publication_date,status,price_currency)
+    VALUES (3003000, 1, 'very good car', 1, '2021-03-16 21:38:09.169','ACTIVE', 'BYN');
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (420000, false, 2, 'very good car', 2, '2021-03-14 07:36:09.169' );
+INSERT INTO public.currency_exchange(currency_main, currency_to, value)
+	VALUES ('BYN', 'RUB', 30.34);
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (430000, false, 2, 'very good car', 1, '2021-03-15 05:38:09.169' );
+INSERT INTO public.currency_exchange(currency_main, currency_to, value)
+	VALUES ('BYN', 'BYN', 1.0);
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (434000, false, 2, 'very good car', 1, '2021-03-15 22:48:09.169' );
+INSERT INTO public.currency_exchange(currency_main, currency_to, value)
+	VALUES ('BYN', 'EUR', 3.10);
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (330000, false, 2, 'very good car', 2, '2021-03-15 22:38:09.169' );
+INSERT INTO public.currency_exchange(currency_main, currency_to, value)
+	VALUES ('BYN', 'USD', 2.52);
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (330000, false, 2, 'very good car', 3, '2021-03-15 23:18:09.169' );
+INSERT INTO public.currency_exchange(currency_main, currency_to, value)
+	VALUES ('BYN', 'UAH', 10.75);
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (360000, false, 2, 'very good car', 1, '2021-03-14 23:38:09.169' );
+INSERT INTO public.currency_exchange(currency_main, currency_to, value)
+	VALUES ('RUB', 'RUB', 1.0);
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (370000, false, 2, 'very good car', 1, '2021-03-16 20:38:09.169' );
+INSERT INTO public.currency_exchange(currency_main, currency_to, value)
+	VALUES ('RUB', 'BYN', 0.04);
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (380000, false, 2, 'very good car', 1, '2021-03-15 14:38:09.169' );
+INSERT INTO public.currency_exchange(currency_main, currency_to, value)
+	VALUES ('RUB', 'EUR', 0.01);
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (390000, false, 1, 'very good car', 1, '2021-03-14 21:38:09.169' );
+INSERT INTO public.currency_exchange(currency_main, currency_to, value)
+	VALUES ('RUB', 'USD', 0.015);
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (304000, false, 1, 'very good car', 1, '2021-03-14 23:38:09.169' );
+INSERT INTO public.currency_exchange(currency_main, currency_to, value)
+	VALUES ('RUB', 'UAH', 0.20);
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (305000, false, 1, 'very good car', 3, '2021-03-14 22:38:09.169' );
+INSERT INTO public.currency_exchange(currency_main, currency_to, value)
+	VALUES ('USD', 'RUB', 70.34);
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (100000, false, 1, 'very good car', 3, '2021-03-19 23:38:09.169' );
+INSERT INTO public.currency_exchange(currency_main, currency_to, value)
+	VALUES ('USD', 'BYN', 0.40);
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (200000, false, 1, 'very good car', 3, '2021-03-14 23:38:09.169' );
+INSERT INTO public.currency_exchange(currency_main, currency_to, value)
+	VALUES ('USD', 'EUR', 1.10);
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (320000, false, 1, 'very good car', 3, '2021-03-17 23:38:09.169' );
+INSERT INTO public.currency_exchange(currency_main, currency_to, value)
+	VALUES ('USD', 'USD', 1.0);
 
-INSERT INTO public.car_ad(price, sold, user_id, descriptions, car_brand_id, publication_date)
-	VALUES (350000, false, 1, 'very good car', 3, '2021-03-15 23:38:09.169' );
+INSERT INTO public.currency_exchange(currency_main, currency_to, value)
+	VALUES ('USD', 'UAH', 0.10);
 
-INSERT INTO public.car_image(image, car_ad_id)
-	VALUES ('crgvtyhuyjijkyutytgr', 13);
+INSERT INTO public.currency_exchange(currency_main, currency_to, value)
+	VALUES ('EUR', 'RUB', 90.34);
 
-INSERT INTO public.car_image(image, car_ad_id)
-	VALUES ('crgvtyhuyjijkyutycrghyujitktgr', 13);
+INSERT INTO public.currency_exchange(currency_main, currency_to, value)
+	VALUES ('EUR', 'BYN', 3.10);
 
-INSERT INTO public.car_image(image, car_ad_id)
-	VALUES ('crgvtyhuyjijkyutytgr', 14);
+INSERT INTO public.currency_exchange(currency_main, currency_to, value)
+	VALUES ('EUR', 'EUR', 1.0);
+
+INSERT INTO public.currency_exchange(currency_main, currency_to, value)
+	VALUES ('EUR', 'USD', 0.92);
+
+INSERT INTO public.currency_exchange(currency_main, currency_to, value)
+	VALUES ('EUR', 'UAH', 15.75);
+
+INSERT INTO public.currency_exchange(currency_main, currency_to, value)
+	VALUES ('UAH', 'RUB', 30.34);
+
+INSERT INTO public.currency_exchange(currency_main, currency_to, value)
+	VALUES ('UAH', 'BYN', 10.0);
+
+INSERT INTO public.currency_exchange(currency_main, currency_to, value)
+	VALUES ('UAH', 'EUR', 15.10);
+
+INSERT INTO public.currency_exchange(currency_main, currency_to, value)
+	VALUES ('UAH', 'USD', 10.52);
+
+INSERT INTO public.currency_exchange(currency_main, currency_to, value)
+	VALUES ('UAH', 'UAH', 1.0);

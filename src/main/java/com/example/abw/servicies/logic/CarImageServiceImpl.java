@@ -36,7 +36,7 @@ public class CarImageServiceImpl extends GenericServiceImpl<CarImage> implements
         CarAdvertisement carAd = carAdvertisementService.findById(carAdId);
         Set<byte[]> images = new HashSet<>();
         for (CarImage carImage : carAd.getCarImages()) {
-            images.add(carImage.getContent());
+            images.add(carImage.getContentImage());
         }
         return images;
     }
@@ -49,7 +49,7 @@ public class CarImageServiceImpl extends GenericServiceImpl<CarImage> implements
         if (userUtil.getCustomUserDetails().getUsername().equals(carAdvertisement.getUser().getEmail())) {
             CarImage image = new CarImage();
             image.setCarAd(carAdvertisement);
-            image.setContent(content);
+            image.setContentImage(content);
             return create(image);
         } else throw new PrivacyViolationException("privacy violation");
     }

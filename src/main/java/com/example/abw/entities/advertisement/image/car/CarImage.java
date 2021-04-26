@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Data
 @Entity
 @EqualsAndHashCode
-@Table(name = "car_image1")
+@Table(name = "car_image")
 public class CarImage implements Serializable, Image {
 
     @Id
@@ -23,7 +23,7 @@ public class CarImage implements Serializable, Image {
 
     @Lob
     @NotNull
-    byte[] content;
+    byte[] contentImage;
 
     @JsonIgnore
     @NotNull(message = "Image carAd must not be null")
@@ -33,11 +33,11 @@ public class CarImage implements Serializable, Image {
 
     @Override
     public byte[] getImage() {
-        return this.content;
+        return this.contentImage;
     }
 
     @Override
     public void setImage(byte[] content) {
-        this.content = content;
+        this.contentImage = content;
     }
 }

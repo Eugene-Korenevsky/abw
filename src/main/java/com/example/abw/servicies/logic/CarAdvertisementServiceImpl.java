@@ -82,7 +82,7 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
             for (MultipartFile multipartImage : carAdvertisementRequest.getImages()) {
                 if (multipartImage != null) {
                     CarImage carImage = new CarImage();
-                    carImage.setContent(multipartImage.getBytes());
+                    carImage.setContentImage(multipartImage.getBytes());
                     carImage.setCarAd(carAd);
                     carImages.add(carImage);
                 }

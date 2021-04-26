@@ -1,10 +1,12 @@
 package com.example.abw.entities.currency;
 
+import com.example.abw.model.currency.Currency;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 @Data
 @Entity
@@ -16,13 +18,13 @@ public class CurrencyExchange {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne
-    @JoinColumn(name = "first_currency_id", referencedColumnName = "id")
-    private CurrencyEntity currencyEntityMain;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Currency currencyMain;
 
-    @ManyToOne
-    @JoinColumn(name = "second_currency_id", referencedColumnName = "id")
-    private CurrencyEntity currencyEntityTo;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Currency currencyTo;
 
-    private double value;
+    private BigDecimal value;
 }
