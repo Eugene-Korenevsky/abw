@@ -4,16 +4,15 @@ import com.example.abw.model.currency.Currency;
 import org.springframework.stereotype.Component;
 
 import java.util.EnumSet;
+import java.util.stream.Stream;
 
 @Component
 public class CurrencyUtil {
     public String getCurrencyString(Currency currentCurrency) {
-        StringBuilder stringBuilder = new StringBuilder();
-        EnumSet<Currency> currencies = EnumSet.allOf(Currency.class);
-        for (Currency currency : currencies) {
-            if (!currency.equals(currentCurrency)) stringBuilder.append((currency)).append(",");
-        }
-        int last = stringBuilder.lastIndexOf(",");
-        return stringBuilder.substring(0, last);
+        Stream<Currency> stream = EnumSet.allOf(Currency.class).stream();
+        String url = stream.filter(x -> !x.equals(currentCurrency)).map(x -> x + ",")
+                .reduce("", (res, str) -> res + str);
+        int last = url.lastIndexOf(",");
+        return url.substring(0, last);
     }
 }
