@@ -16,7 +16,10 @@ public class DevelopmentConfig {
 
     ) {
         return args -> {
-
+            String s = "abc";
+            String sd = "cba";
+            System.out.println(s.hashCode());
+            System.out.println(sd.hashCode());
         };
     }
 }
