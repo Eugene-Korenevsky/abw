@@ -28,7 +28,7 @@ public class CarAdvertisementController {
     }
 
     @GetMapping()
-    public ResponseEntity<?> getAllByUser(PageableParams pageableParams) throws ResourceNotFoundException {
+    public ResponseEntity<?> getAllByUser(PageableParams pageableParams) throws ResourceNotFoundException,ValidationException {
         return new ResponseEntity<>(carAdvertisementService.findAllByUser(pageableParams),HttpStatus.OK);
     }
 

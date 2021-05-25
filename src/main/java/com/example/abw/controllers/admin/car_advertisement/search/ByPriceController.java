@@ -2,6 +2,7 @@ package com.example.abw.controllers.admin.car_advertisement.search;
 
 import com.example.abw.entities.advertisement.Advertisement;
 import com.example.abw.entities.advertisement.CarAdvertisement;
+import com.example.abw.exception.validation.ValidationException;
 import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementResponse;
 import com.example.abw.model.pageable.PageableParams;
 import com.example.abw.servicies.CarAdvertisementService;
@@ -24,7 +25,7 @@ public class ByPriceController {
     @GetMapping
     public ResponseEntity<?> getAllByPrice(PageableParams pageableParams,
                                            @RequestParam(value = "startPrice") Long startPrice,
-                                           @RequestParam(value = "endPrice") Long endPrice) {
+                                           @RequestParam(value = "endPrice") Long endPrice) throws ValidationException {
         List<CarAdvertisementResponse> advertisements =
                 carAdvertisementServiceImpl.findAllByPrice(startPrice, endPrice, true, pageableParams);
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
@@ -34,7 +35,7 @@ public class ByPriceController {
     public ResponseEntity<?> getAllByPriceAndCarBrand(PageableParams pageableParams,
                                                       @RequestParam(value = "startPrice") Long startPrice,
                                                       @RequestParam(value = "endPrice") Long endPrice,
-                                                      @RequestParam(value = "carBrand") String carBrand) {
+                                                      @RequestParam(value = "carBrand") String carBrand) throws ValidationException{
         List<CarAdvertisementResponse> advertisements =
                 carAdvertisementServiceImpl.findAllByPriceAndCarBrand(startPrice, endPrice,
                 carBrand, true, pageableParams);
@@ -45,7 +46,7 @@ public class ByPriceController {
     public ResponseEntity<?> getAllByPriceAndCarBrandName(PageableParams pageableParams,
                                                           @RequestParam(value = "startPrice") Long startPrice,
                                                           @RequestParam(value = "endPrice") Long endPrice,
-                                                          @RequestParam(value = "carBrandName") String carBrandName) {
+                                                          @RequestParam(value = "carBrandName") String carBrandName) throws ValidationException {
         List<CarAdvertisementResponse> advertisements =
                 carAdvertisementServiceImpl.findAllByPriceAndCarBrandName(startPrice, endPrice,
                 carBrandName, true, pageableParams);

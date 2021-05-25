@@ -1,6 +1,7 @@
 package com.example.abw.controllers.admin.user;
 
 import com.example.abw.entities.user.User;
+import com.example.abw.exception.validation.ValidationException;
 import com.example.abw.model.pageable.PageableParams;
 import com.example.abw.servicies.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity<?> getAllUsers(PageableParams pageableParams) {
+    public ResponseEntity<?> getAllUsers(PageableParams pageableParams) throws ValidationException {
         List<User> users = userService.findAll(pageableParams);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }

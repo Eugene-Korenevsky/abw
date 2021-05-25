@@ -112,7 +112,7 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
 
     @Transactional
     @Override
-    public List<CarAdvertisementResponse> findAllByCarBrand(String carBrand, boolean isAdmin, PageableParams pageableParams) {
+    public List<CarAdvertisementResponse> findAllByCarBrand(String carBrand, boolean isAdmin, PageableParams pageableParams) throws ValidationException{
         Pageable pageable = PageableUtil.getPageable(pageableParams);
         List<CarAdvertisement> carAdvertisements;
         if (isAdmin) {
@@ -128,7 +128,7 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
     @Transactional
     @Override
     public List<CarAdvertisementResponse> findAllByCarBrandName(String carBrandName,
-                                                                boolean isAdmin, PageableParams pageableParams) {
+                                                                boolean isAdmin, PageableParams pageableParams) throws ValidationException {
         Pageable pageable = PageableUtil.getPageable(pageableParams);
         List<CarAdvertisement> carAdvertisements;
         if (isAdmin) {
@@ -144,7 +144,7 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
     @Transactional
     @Override
     public List<CarAdvertisementResponse> findAllByPrice(
-            Long startPrice, Long endPrice, boolean isAdmin, PageableParams pageableParams) {
+            Long startPrice, Long endPrice, boolean isAdmin, PageableParams pageableParams) throws ValidationException {
         Pageable pageable = PageableUtil.getPageable(pageableParams);
         List<CarAdvertisement> carAdvertisements;
         if (isAdmin) carAdvertisements = carAdvertisementPaginationRepository.
@@ -157,7 +157,7 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
     @Transactional
     @Override
     public List<CarAdvertisementResponse> findAllByPriceAndCarBrand(Long startPrice, Long endPrice, String carBrand,
-                                                                    boolean isAdmin, PageableParams pageableParams) {
+                                                                    boolean isAdmin, PageableParams pageableParams) throws ValidationException {
         Pageable pageable = PageableUtil.getPageable(pageableParams);
         List<CarAdvertisement> carAdvertisements;
         if (isAdmin) {
@@ -174,7 +174,7 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
     public List<CarAdvertisementResponse> findAllByPriceAndCarBrandName(Long startPrice, Long endPrice,
                                                                         String carBrandName,
                                                                         boolean isAdmin,
-                                                                        PageableParams pageableParams) {
+                                                                        PageableParams pageableParams) throws ValidationException {
         Pageable pageable = PageableUtil.getPageable(pageableParams);
         List<CarAdvertisement> carAdvertisements;
         if (isAdmin) carAdvertisements = carAdvertisementPaginationRepository
@@ -188,7 +188,7 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
 
     @Transactional
     @Override
-    public List<CarAdvertisementResponse> findAll(boolean isAdmin, PageableParams pageableParams) {
+    public List<CarAdvertisementResponse> findAll(boolean isAdmin, PageableParams pageableParams) throws ValidationException {
         Pageable pageable = PageableUtil.getPageable(pageableParams);
         List<CarAdvertisement> carAdvertisements;
         if (isAdmin) carAdvertisements = findAllCarAdvertisements(pageable);
@@ -237,7 +237,8 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
 
     @Transactional
     @Override
-    public List<CarAdvertisementResponse> findAllByUser(PageableParams pageableParams) throws ResourceNotFoundException {
+    public List<CarAdvertisementResponse> findAllByUser(
+            PageableParams pageableParams) throws ResourceNotFoundException,ValidationException {
         Pageable pageable = PageableUtil.getPageable(pageableParams);
         CustomUserDetails customUserDetails = userUtil.getCustomUserDetails();
         if (customUserDetails != null) {

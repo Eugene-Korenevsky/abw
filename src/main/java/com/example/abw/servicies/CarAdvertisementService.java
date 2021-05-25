@@ -29,25 +29,28 @@ public interface CarAdvertisementService extends GenericService<CarAdvertisement
     public CarAdvertisementResponse refreshCarAdvertisement(long advertisementId)
             throws ResourceNotFoundException, PrivacyViolationException;
 
-    public List<CarAdvertisementResponse> findAllByUser(PageableParams pageableParams) throws ResourceNotFoundException;
+    public List<CarAdvertisementResponse> findAllByUser(
+            PageableParams pageableParams) throws ResourceNotFoundException,ValidationException;
 
     public void softDelete(long id)
             throws ResourceNotFoundException, ValidationException, PrivacyViolationException;
 
     public List<CarAdvertisementResponse> findAllByCarBrand(
-            String carBrand, boolean isAdmin, PageableParams pageableParams);
+            String carBrand, boolean isAdmin, PageableParams pageableParams) throws ValidationException;
 
-    public List<CarAdvertisementResponse> findAllByCarBrandName(String carBrandName, boolean isAdmin, PageableParams pageableParams);
+    public List<CarAdvertisementResponse> findAllByCarBrandName(
+            String carBrandName, boolean isAdmin, PageableParams pageableParams)throws ValidationException;
 
-    public List<CarAdvertisementResponse> findAllByPrice(Long startPrice, Long endPrice, boolean isAdmin, PageableParams pageableParams);
+    public List<CarAdvertisementResponse> findAllByPrice(
+            Long startPrice, Long endPrice, boolean isAdmin, PageableParams pageableParams) throws ValidationException;
 
     public List<CarAdvertisementResponse> findAllByPriceAndCarBrand(Long startPrice, Long endPrice, String carBrand,
-                                                         boolean isAdmin, PageableParams pageableParams);
+                                                         boolean isAdmin, PageableParams pageableParams) throws ValidationException;
 
     public List<CarAdvertisementResponse> findAllByPriceAndCarBrandName(Long startPrice, Long endPrice, String carBrandName,
-                                                             boolean isAdmin, PageableParams pageableParams);
+                                                             boolean isAdmin, PageableParams pageableParams) throws ValidationException;
 
-    public List<CarAdvertisementResponse> findAll(boolean isAdmin, PageableParams pageableParams);
+    public List<CarAdvertisementResponse> findAll(boolean isAdmin, PageableParams pageableParams) throws ValidationException;
 
 
 }

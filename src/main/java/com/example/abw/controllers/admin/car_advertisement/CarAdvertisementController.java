@@ -2,6 +2,7 @@ package com.example.abw.controllers.admin.car_advertisement;
 
 import com.example.abw.entities.advertisement.Advertisement;
 import com.example.abw.entities.advertisement.CarAdvertisement;
+import com.example.abw.exception.validation.ValidationException;
 import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementResponse;
 import com.example.abw.model.pageable.PageableParams;
 import com.example.abw.servicies.CarAdvertisementService;
@@ -21,7 +22,7 @@ public class CarAdvertisementController {
     private CarAdvertisementService carAdvertisementServiceImpl;
 
     @GetMapping
-    public ResponseEntity<?> getAllCarAds(PageableParams pageableParams) {
+    public ResponseEntity<?> getAllCarAds(PageableParams pageableParams) throws ValidationException {
         List<CarAdvertisementResponse> advertisements = carAdvertisementServiceImpl.findAll(true, pageableParams);
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
     }

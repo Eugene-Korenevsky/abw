@@ -3,6 +3,7 @@ package com.example.abw.controllers.admin.car_advertisement.search;
 import com.example.abw.AppProperties;
 import com.example.abw.entities.advertisement.Advertisement;
 import com.example.abw.entities.advertisement.CarAdvertisement;
+import com.example.abw.exception.validation.ValidationException;
 import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementResponse;
 import com.example.abw.model.pageable.PageableParams;
 import com.example.abw.servicies.CarAdvertisementService;
@@ -26,7 +27,7 @@ public class ByOneStringController {
 
     @GetMapping("/carBrand")
     public ResponseEntity<?> getAllByCarBrand(PageableParams pageableParams,
-                                              @RequestParam(value = "carBrand") String carBrand) {
+                                              @RequestParam(value = "carBrand") String carBrand) throws ValidationException {
         List<CarAdvertisementResponse> advertisements =
                 carAdvertisementServiceImpl.findAllByCarBrand(carBrand, true, pageableParams);
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
@@ -34,7 +35,7 @@ public class ByOneStringController {
 
     @GetMapping("/carBrandName")
     public ResponseEntity<?> getAllByCarBrandName(PageableParams pageableParams,
-                                                  @RequestParam(value = "carBrandName") String carBrandName) {
+                                                  @RequestParam(value = "carBrandName") String carBrandName) throws ValidationException {
         List<CarAdvertisementResponse> advertisements =
                 carAdvertisementServiceImpl.findAllByCarBrandName(carBrandName, false, pageableParams);
         return new ResponseEntity<>(advertisements, HttpStatus.OK);

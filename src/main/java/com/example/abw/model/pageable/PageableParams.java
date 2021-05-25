@@ -9,14 +9,14 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class PageableParams {
-    @NonNull
-    private int page;
-    @NonNull
-    private int size;
-    @NotNull
+    @NotNull(message = "page number is required")
+    private Integer page;
+    @NotNull(message = "page size is required")
+    private Integer size;
+    @NotNull(message = "filter must not be null")
     private String filter;
-    @NotNull
+    @NotNull(message = "sortKind is required")
     private SortKind sortKind;
-    @NotNull
+    @NotNull(message = "currency is required")
     private Currency currency;
 }
