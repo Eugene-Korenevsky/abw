@@ -19,10 +19,6 @@ public class DevelopmentConfig {
 
     ) {
         return args -> {
-          /*  List<CurrencyEx> currencyExes = currencyExRepository.findAll();
-            for (CurrencyEx currencyEx : currencyExes){
-                System.out.println(currencyEx.getCurrency());
-            }*/
         };
     }
 }
