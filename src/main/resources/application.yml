@@ -1,6 +1,9 @@
 server:
   port: 8081
 
+mongock:
+  transaction-enabled: false
+
 spring:
   servlet:
     multipart:

@@ -6,9 +6,10 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 @Data
-@Document(collection = "currency_ex1")
+@Document(collection = "currency_ex")
 public class CurrencyEx {
     @Id
     private String id;
@@ -19,5 +20,5 @@ public class CurrencyEx {
 
     @NotNull
     @Field("value")
-    private double value;
+    private BigDecimal value;
 }
