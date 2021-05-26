@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-@ChangeLog
+@ChangeLog(order = "001")
 public class DatabaseChangeLog {
     @ChangeSet(order = "001", id = "00.00.01", author = "Eugene")
     public void seedDatabase(CurrencyExRepository currencyExRepository) {
