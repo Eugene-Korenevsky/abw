@@ -7,11 +7,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MessageTextUtil {
-    @Autowired
-    private AppProperties appProperties;
+    private static AppProperties appProperties;
 
-    public String getCarAdvertisementMessageText(CarAdvertisement carAdvertisement) {
+    public static String getCarAdvertisementMessageText(CarAdvertisement carAdvertisement) {
         return "Dear " + carAdvertisement.getUser().getName() + " " + appProperties.getAdvertisementText() + " " +
                 carAdvertisement.getCarBrand().getFullName() + " " + appProperties.getCarAdvertisementMessage();
+    }
+
+    @Autowired
+    public void setAppProperties(AppProperties appProperties) {
+        MessageTextUtil.appProperties = appProperties;
     }
 }

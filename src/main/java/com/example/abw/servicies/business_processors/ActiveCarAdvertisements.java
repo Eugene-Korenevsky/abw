@@ -25,8 +25,6 @@ public class ActiveCarAdvertisements {
     @Autowired
     private CarAdvertisementRepository carAdvertisementRepository;
     @Autowired
-    private MessageTextUtil messageTextUtil;
-    @Autowired
     private MessageService messageService;
 
 
@@ -42,7 +40,7 @@ public class ActiveCarAdvertisements {
             carAdvertisement.setStatus(Status.EXPIRED);
             carAdvertisement.setEndPublicationDate(new Timestamp(date.getTime()));
             messageService.sendMessage(carAdvertisement.getUser().getEmail(),
-                    messageTextUtil.getCarAdvertisementMessageText(carAdvertisement),
+                    MessageTextUtil.getCarAdvertisementMessageText(carAdvertisement),
                     appProperties.getCarAdvertisementSubject());
         }
         carAdvertisementRepository.saveAll(carAdvertisements);
