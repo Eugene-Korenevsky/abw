@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class CurrencyUtil {
-    public String getCurrencyString(Currency currentCurrency) {
+    public static String getCurrencyString(Currency currentCurrency) {
         return EnumSet.allOf(Currency.class).stream().filter(x -> !x.equals(currentCurrency))
                 .map(Enum::toString).collect(Collectors.joining(","));
     }
