@@ -1,8 +1,9 @@
-package com.example.abw.servicies;
+package com.example.abw.servicies.car_brand;
 
 import com.example.abw.entities.sell_item.car.CarBrand;
 import com.example.abw.exception.entities.ResourceNotFoundException;
 import com.example.abw.repositories.sell_item.car.CarBrandRepository;
+import com.example.abw.servicies.CarBrandService;
 import com.example.abw.servicies.logic.CarBrandServiceImpl;
 import org.junit.Assert;
 import org.junit.Before;
