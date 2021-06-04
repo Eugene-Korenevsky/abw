@@ -15,16 +15,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-
-import static org.springframework.util.StringUtils.hasText;
-import static org.springframework.util.StringUtils.sortStringArray;
 
 @Component
 public class JwtFilter extends GenericFilterBean {
-
-    //public static final String AUTHORIZATION = "Authorization";
 
     @Autowired
     private JwtProvider jwtProvider;

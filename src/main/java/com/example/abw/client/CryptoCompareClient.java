@@ -5,7 +5,6 @@ import com.example.abw.exception.client.CryptoCompareClientResponseErrorHandling
 import com.example.abw.model.currency.Currency;
 import com.example.abw.utils.currency.CurrencyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -19,8 +18,6 @@ public class CryptoCompareClient {
     private CurrencyUtil currencyUtil;
     @Autowired
     private RestTemplate restTemplate;
-    @Autowired
-    private RestTemplateBuilder restTemplateBuilder;
     @Autowired
     private CryptoCompareClientResponseErrorHandling responseErrorHandling;
 

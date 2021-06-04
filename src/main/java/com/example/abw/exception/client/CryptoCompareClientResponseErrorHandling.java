@@ -15,15 +15,16 @@ import static org.springframework.http.HttpStatus.Series.SERVER_ERROR;
 public class CryptoCompareClientResponseErrorHandling implements ResponseErrorHandler {
     @Autowired
     private CurrencyExRepository currencyExRepository;
+
     @Override
     public boolean hasError(ClientHttpResponse clientHttpResponse) throws IOException {
         return (clientHttpResponse.getStatusCode().series() == CLIENT_ERROR
-                        || clientHttpResponse.getStatusCode().series() == SERVER_ERROR);
+                || clientHttpResponse.getStatusCode().series() == SERVER_ERROR);
     }
 
     @Override
     public void handleError(ClientHttpResponse clientHttpResponse) throws IOException {
-        System.out.println("error handling");
+        System.out.println(clientHttpResponse.getStatusCode());
         /** here we can add some action when we have response error **/
     }
 }
