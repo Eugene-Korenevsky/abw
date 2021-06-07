@@ -16,8 +16,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.math.BigDecimal;
@@ -39,15 +41,21 @@ public class CarAdvertisementServiceTest {
     CurrencyExchangeService currencyExchangeServiceImpl;
     @Mock
     CarAdvertisementMapper carAdvertisementMapper;
+    @InjectMocks
+    CarAdvertisementService carAdvertisementService = new CarAdvertisementServiceImpl(carAdvertisementRepository,
+            userServiceImpl,carBrandServiceImpl,carAdvertisementPaginationRepository,userUtil,
+            currencyExchangeServiceImpl,carAdvertisementMapper);
 
-    private CarAdvertisementService carAdvertisementService;
+    //private CarAdvertisementService carAdvertisementService;
 
 
     @Before
     public void init() {
-        carAdvertisementService = new CarAdvertisementServiceImpl(carAdvertisementRepository,
-                userServiceImpl, carBrandServiceImpl, carAdvertisementPaginationRepository, userUtil,
-                currencyExchangeServiceImpl, carAdvertisementMapper);
+        MockitoAnnotations.openMocks(this);
+        //MockitoAnnotations.initMocks(this);
+       // carAdvertisementService = new CarAdvertisementServiceImpl(carAdvertisementRepository,
+         //       userServiceImpl, carBrandServiceImpl, carAdvertisementPaginationRepository, userUtil,
+           //     currencyExchangeServiceImpl, carAdvertisementMapper);
     }
 
     @Test
