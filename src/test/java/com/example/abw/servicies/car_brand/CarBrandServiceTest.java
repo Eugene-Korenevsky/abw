@@ -5,6 +5,7 @@ import com.example.abw.exception.entities.ResourceNotFoundException;
 import com.example.abw.repositories.sell_item.car.CarBrandRepository;
 import com.example.abw.servicies.CarBrandService;
 import com.example.abw.servicies.logic.CarBrandServiceImpl;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,11 +22,15 @@ public class CarBrandServiceTest {
     @InjectMocks
     CarBrandService carBrandServiceImpl = new CarBrandServiceImpl(carBrandRepository);
 
+    private AutoCloseable closeable;
 
+    @Before public void openMocks() {
+        closeable = MockitoAnnotations.openMocks(this);
+    }
 
-    @Before
-    public void init() {
-        MockitoAnnotations.initMocks(this);
+    @After
+    public void releaseMocks() throws Exception {
+        closeable.close();
     }
 
     @Test

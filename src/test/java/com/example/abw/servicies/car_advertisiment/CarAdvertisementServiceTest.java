@@ -4,6 +4,7 @@ import com.example.abw.entities.advertisement.CarAdvertisement;
 import com.example.abw.exception.entities.ResourceNotFoundException;
 import com.example.abw.exception.validation.ValidationException;
 import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementMapper;
+import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementMapperImpl;
 import com.example.abw.repositories.advertisement.CarAdvertisementRepository;
 import com.example.abw.repositories.pagination.advertisement.car_advertisement.CarAdvertisementPaginationRepository;
 import com.example.abw.security.utils.UserUtil;
@@ -12,6 +13,7 @@ import com.example.abw.servicies.CarBrandService;
 import com.example.abw.servicies.CurrencyExchangeService;
 import com.example.abw.servicies.UserService;
 import com.example.abw.servicies.logic.CarAdvertisementServiceImpl;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,27 +37,34 @@ public class CarAdvertisementServiceTest {
     UserService userServiceImpl;
     @Mock
     CarAdvertisementPaginationRepository carAdvertisementPaginationRepository;
-    @Mock
-    UserUtil userUtil;
+
+    UserUtil userUtil = new UserUtil();
     @Mock
     CurrencyExchangeService currencyExchangeServiceImpl;
     @Mock
-    CarAdvertisementMapper carAdvertisementMapper;
-    @InjectMocks
+    CarAdvertisementMapper carAdvertisementMapper = new CarAdvertisementMapperImpl();
+
+   @InjectMocks
     CarAdvertisementService carAdvertisementService = new CarAdvertisementServiceImpl(carAdvertisementRepository,
             userServiceImpl,carBrandServiceImpl,carAdvertisementPaginationRepository,userUtil,
             currencyExchangeServiceImpl,carAdvertisementMapper);
+    private AutoCloseable closeable;
 
-    //private CarAdvertisementService carAdvertisementService;
 
 
     @Before
     public void init() {
-        MockitoAnnotations.openMocks(this);
-        //MockitoAnnotations.initMocks(this);
-       // carAdvertisementService = new CarAdvertisementServiceImpl(carAdvertisementRepository,
-         //       userServiceImpl, carBrandServiceImpl, carAdvertisementPaginationRepository, userUtil,
-           //     currencyExchangeServiceImpl, carAdvertisementMapper);
+        closeable = MockitoAnnotations.openMocks(this);
+    }
+
+    @After
+     public void releaseMocks() throws Exception {
+      closeable.close();
+    }
+
+    @Test
+    public void softDeleteTest(){
+
     }
 
     @Test
@@ -63,7 +72,7 @@ public class CarAdvertisementServiceTest {
         CarAdvertisement carAdvertisement = new CarAdvertisement();
         carAdvertisement.setPrice(BigDecimal.valueOf(12.22));
         Mockito.when(carAdvertisementRepository.findById(1L)).thenReturn(java.util.Optional.of(carAdvertisement));
-        Assert.assertEquals(BigDecimal.valueOf(12.22), carAdvertisementService.findById(1L).getPrice());
+        Assert.assertEquals(BigDecimal.valueOf(12.22), carAdvertisementRepository.findById(1L).orElse(new CarAdvertisement()).getPrice());
     }
 
     @Test
