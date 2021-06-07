@@ -18,7 +18,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -44,26 +43,26 @@ public class CarAdvertisementServiceTest {
     @Mock
     CarAdvertisementMapper carAdvertisementMapper = new CarAdvertisementMapperImpl();
 
-   @InjectMocks
-    CarAdvertisementService carAdvertisementService = new CarAdvertisementServiceImpl(carAdvertisementRepository,
-            userServiceImpl,carBrandServiceImpl,carAdvertisementPaginationRepository,userUtil,
-            currencyExchangeServiceImpl,carAdvertisementMapper);
-    private AutoCloseable closeable;
+    private CarAdvertisementService carAdvertisementService;
 
+    private AutoCloseable closeable;
 
 
     @Before
     public void init() {
         closeable = MockitoAnnotations.openMocks(this);
+        carAdvertisementService = new CarAdvertisementServiceImpl(carAdvertisementRepository,
+                userServiceImpl, carBrandServiceImpl, carAdvertisementPaginationRepository, userUtil,
+                currencyExchangeServiceImpl, carAdvertisementMapper);
     }
 
     @After
-     public void releaseMocks() throws Exception {
-      closeable.close();
+    public void releaseMocks() throws Exception {
+        closeable.close();
     }
 
     @Test
-    public void softDeleteTest(){
+    public void softDeleteTest() {
 
     }
 
@@ -72,17 +71,18 @@ public class CarAdvertisementServiceTest {
         CarAdvertisement carAdvertisement = new CarAdvertisement();
         carAdvertisement.setPrice(BigDecimal.valueOf(12.22));
         Mockito.when(carAdvertisementRepository.findById(1L)).thenReturn(java.util.Optional.of(carAdvertisement));
-        Assert.assertEquals(BigDecimal.valueOf(12.22), carAdvertisementRepository.findById(1L).orElse(new CarAdvertisement()).getPrice());
+        Assert.assertEquals(BigDecimal.valueOf(12.22), carAdvertisementService.findById(1L).getPrice());
+        Mockito.verify(carAdvertisementRepository,Mockito.atLeastOnce()).findById(Mockito.anyLong());
     }
 
     @Test
     public void testFindByPrice() throws ValidationException {
         try {
-            carAdvertisementService.findAllByPrice(0L,1000L,false,null);
-        }catch (ValidationException e){
-          Assert.assertNotEquals("",e.getFullMessage());
+            carAdvertisementService.findAllByPrice(0L, 1000L, false, null);
+        } catch (ValidationException e) {
+            Assert.assertNotEquals("", e.getFullMessage());
         }
+        Mockito.verify(carAdvertisementPaginationRepository,Mockito.never())
+                .readAllByPriceBetween(0L,1000L,null);
     }
-
-
 }
