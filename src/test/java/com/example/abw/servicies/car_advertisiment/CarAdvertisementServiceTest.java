@@ -74,8 +74,8 @@ public class CarAdvertisementServiceTest {
         carAdvertisement.setUser(user);
         CustomUserDetails customUserDetails = Mockito.mock(CustomUserDetails.class);
         Mockito.when(carAdvertisementRepository.findById(1L)).thenReturn(java.util.Optional.of(carAdvertisement));
-        Mockito.when(userUtil.getCustomUserDetails()).thenReturn(customUserDetails);
         Mockito.when(customUserDetails.getUsername()).thenReturn("vanya@email.com");
+        Mockito.when(userUtil.getCustomUserDetails()).thenReturn(customUserDetails);
         carAdvertisementService.softDelete(1L);
         Mockito.verify(carAdvertisementRepository, Mockito.atLeastOnce()).save(Mockito.any());
     }

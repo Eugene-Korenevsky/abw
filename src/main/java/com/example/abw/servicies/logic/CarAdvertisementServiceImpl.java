@@ -210,7 +210,6 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
                 carAdvertisementRepository.save(carAdvertisement);
             } else throw new PrivacyViolationException("privacy violation");
         }
-        throw new PrivacyViolationException("user must login");
     }
 
 
