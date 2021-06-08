@@ -112,7 +112,7 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
 
     @Transactional
     @Override
-    public List<CarAdvertisementResponse> findAllByCarBrand(String carBrand, boolean isAdmin, PageableParams pageableParams) throws ValidationException{
+    public List<CarAdvertisementResponse> findAllByCarBrand(String carBrand, boolean isAdmin, PageableParams pageableParams) throws ValidationException {
         Pageable pageable = PageableUtil.getPageable(pageableParams);
         List<CarAdvertisement> carAdvertisements;
         if (isAdmin) {
@@ -201,13 +201,16 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
     public void softDelete(long id)
             throws ResourceNotFoundException, ValidationException, PrivacyViolationException {
         CarAdvertisement carAdvertisement = findById(id);
-        if (userUtil.getCustomUserDetails().getUsername().equals(carAdvertisement.getUser().getEmail())) {
-            carAdvertisement.setStatus(Status.SOLD);
-            Date date = new Date();
-            Timestamp endPublicationDate = new Timestamp(date.getTime());
-            carAdvertisement.setEndPublicationDate(endPublicationDate);
-            carAdvertisementRepository.save(carAdvertisement);
-        } else throw new PrivacyViolationException("privacy violation");
+        if (userUtil.getCustomUserDetails().getUsername() != null) {
+            if (userUtil.getCustomUserDetails().getUsername().equals(carAdvertisement.getUser().getEmail())) {
+                carAdvertisement.setStatus(Status.SOLD);
+                Date date = new Date();
+                Timestamp endPublicationDate = new Timestamp(date.getTime());
+                carAdvertisement.setEndPublicationDate(endPublicationDate);
+                carAdvertisementRepository.save(carAdvertisement);
+            } else throw new PrivacyViolationException("privacy violation");
+        }
+        throw new PrivacyViolationException("user must login");
     }
 
 
@@ -238,7 +241,7 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
     @Transactional
     @Override
     public List<CarAdvertisementResponse> findAllByUser(
-            PageableParams pageableParams) throws ResourceNotFoundException,ValidationException {
+            PageableParams pageableParams) throws ResourceNotFoundException, ValidationException {
         Pageable pageable = PageableUtil.getPageable(pageableParams);
         CustomUserDetails customUserDetails = userUtil.getCustomUserDetails();
         if (customUserDetails != null) {
