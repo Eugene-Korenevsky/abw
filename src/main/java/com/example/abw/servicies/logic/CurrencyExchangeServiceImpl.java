@@ -2,6 +2,7 @@ package com.example.abw.servicies.logic;
 
 import com.example.abw.entities.currency.CurrencyExchange;
 import com.example.abw.model.currency.Currency;
+import com.example.abw.model.currency.CurrencyExchangeDTO;
 import com.example.abw.repositories.currency.CurrencyExchangeRepository;
 import com.example.abw.servicies.CurrencyExchangeService;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,17 @@ public class CurrencyExchangeServiceImpl extends GenericServiceImpl<CurrencyExch
         if (main.equals(currencyTo)) return price;
         CurrencyExchange currencyExchange = currencyExchangeRepository.findByCurrencyMainAndCurrencyTo(main, currencyTo);
         return currencyExchange.getValue().multiply(price);
+    }
+
+    @Override
+    public void updateCurrencyExchange(CurrencyExchangeDTO currencyExchangeDTO) {
+        if (currencyExchangeDTO.getValue().doubleValue() > 0) {
+            CurrencyExchange currencyExchange = currencyExchangeRepository
+                    .findByCurrencyMainAndCurrencyTo(currencyExchangeDTO.getCurrencyMain(),
+                            currencyExchangeDTO.getCurrencyTo());
+            currencyExchange.setValue(currencyExchangeDTO.getValue());
+            currencyExchangeRepository.save(currencyExchange);
+        }
     }
 
     @Override
