@@ -21,7 +21,6 @@ public class CurrencyExchangeListener {
     @org.springframework.kafka.annotation.KafkaListener(topics = "currency_exchange",
             containerFactory = "exchangeKafkaListenerContainerFactory")
     public void currencyExchangeListening(CurrencyExchangeDTO currencyExchange) {
-        System.out.println("final currency " + currencyExchange);
         currencyExchangeService.updateCurrencyExchange(currencyExchange);
         this.countDownLatch.countDown();
     }
