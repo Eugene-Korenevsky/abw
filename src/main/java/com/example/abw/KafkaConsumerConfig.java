@@ -20,7 +20,7 @@ public class KafkaConsumerConfig {
 
     String bootstrapAddress = "localhost:9092";
 
-    public ConsumerFactory<String, CurrencyExchangeDTO> userConsumerFactory() {
+    public ConsumerFactory<String, CurrencyExchangeDTO> currencyExchangeConsumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "currency_exchange");
@@ -34,7 +34,7 @@ public class KafkaConsumerConfig {
     public ConcurrentKafkaListenerContainerFactory<String, CurrencyExchangeDTO> exchangeKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, CurrencyExchangeDTO> factory
                 = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(userConsumerFactory());
+        factory.setConsumerFactory(currencyExchangeConsumerFactory());
         return factory;
     }
 }
