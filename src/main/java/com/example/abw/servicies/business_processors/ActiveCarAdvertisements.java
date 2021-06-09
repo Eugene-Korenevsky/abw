@@ -8,6 +8,8 @@ import com.example.abw.servicies.CarAdvertisementService;
 import com.example.abw.servicies.MessageService;
 import com.example.abw.utils.message.MessageTextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 @Component
+@EnableAsync
 public class ActiveCarAdvertisements {
     @Autowired
     private CarAdvertisementService carAdvertisementService;
@@ -29,6 +32,7 @@ public class ActiveCarAdvertisements {
 
 
     @Transactional
+    @Async
     @Scheduled(fixedRate = 3600000)
     public void checkActiveCarAdvertisements() {
         Date date = new Date();
