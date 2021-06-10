@@ -39,5 +39,6 @@ public class CarBrandServiceTest {
         carBrand.setName("80B4");
         Mockito.when(carBrandRepository.findById(1L)).thenReturn(java.util.Optional.of(carBrand));
         Assert.assertEquals("80B4",carBrandServiceImpl.findById(1L).getName());
+        Mockito.verify(carBrandRepository,Mockito.times(1)).findById(1L);
     }
 }

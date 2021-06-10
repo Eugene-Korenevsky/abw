@@ -78,6 +78,9 @@ public class CarAdvertisementServiceTest {
         Mockito.when(userUtil.getCustomUserDetails()).thenReturn(customUserDetails);
         carAdvertisementService.softDelete(1L);
         Mockito.verify(carAdvertisementRepository, Mockito.atLeastOnce()).save(Mockito.any());
+        Mockito.verify(carAdvertisementRepository,Mockito.times(1)).findById(1L);
+        Mockito.verify(customUserDetails,Mockito.times(2)).getUsername();
+        Mockito.verify(userUtil,Mockito.times(2)).getCustomUserDetails();
     }
 
     @Test
@@ -86,7 +89,7 @@ public class CarAdvertisementServiceTest {
         carAdvertisement.setPrice(BigDecimal.valueOf(12.22));
         Mockito.when(carAdvertisementRepository.findById(1L)).thenReturn(java.util.Optional.of(carAdvertisement));
         Assert.assertEquals(BigDecimal.valueOf(12.22), carAdvertisementService.findById(1L).getPrice());
-        Mockito.verify(carAdvertisementRepository, Mockito.atLeastOnce()).findById(Mockito.anyLong());
+        Mockito.verify(carAdvertisementRepository, Mockito.times(1)).findById(1L);
     }
 
     @Test
