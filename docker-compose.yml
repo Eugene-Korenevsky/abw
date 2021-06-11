@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+  app:
+    image: 'abw:latest'
+    ports:
+      - '8394:8394'
+    build:
+      context: .
+    container_name: app
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/kara
+      - SPRING_DATASOURCE_USERNAME=kara
+      - SPRING_DATASOURCE_PASSWORD=kara
+
+  db:
+    image: 'postgres'
+    container_name: db
+    environment:
+      - POSTGRES_USER=kara
+      - POSTGRES_PASSWORD=kara
