@@ -1,11 +1,11 @@
-package com.example.abw.kafka_consumers;
+package com.example.abw.kafka.currency;
 
 
-import com.example.abw.entities.currency.CurrencyExchange;
 import com.example.abw.model.currency.CurrencyExchangeDTO;
 import com.example.abw.servicies.CurrencyExchangeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.EnableKafka;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.CountDownLatch;
@@ -18,7 +18,7 @@ public class CurrencyExchangeListener {
 
     private final CountDownLatch countDownLatch = new CountDownLatch(1);
 
-    @org.springframework.kafka.annotation.KafkaListener(topics = "currency_exchange",
+    @KafkaListener(topics = "currency_exchange",
             containerFactory = "exchangeKafkaListenerContainerFactory")
     public void currencyExchangeListening(CurrencyExchangeDTO currencyExchange) {
         currencyExchangeService.updateCurrencyExchange(currencyExchange);
