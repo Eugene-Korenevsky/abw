@@ -20,4 +20,7 @@ public class AppProperties {
     private String cryptoCompareUrl;
     private String cryptoCompareKey;
     private String cryptoCompareTo;
+    private String notValidAd;
+    private String validAd;
+    private String onCheckAd;
 }

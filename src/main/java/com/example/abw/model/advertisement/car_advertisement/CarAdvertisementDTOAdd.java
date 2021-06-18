@@ -11,7 +11,6 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode
 public class CarAdvertisementDTOAdd {
-   // private long userId;
     private long carBrandId;
     private BigDecimal price;
     private String descriptions;

@@ -2,9 +2,11 @@ package com.example.abw.servicies;
 
 
 import com.example.abw.entities.advertisement.CarAdvertisement;
+import com.example.abw.exception.ad.NotCorrectAd;
 import com.example.abw.exception.security.PrivacyViolationException;
 import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementResponse;
 import com.example.abw.model.currency.Currency;
+import com.example.abw.model.kafka.KafkaCarAdDTO;
 import com.example.abw.model.pageable.PageableParams;
 import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementDTOAdd;
 import com.example.abw.exception.entities.ResourceNotFoundException;
@@ -14,10 +16,12 @@ import java.io.IOException;
 import java.util.List;
 
 public interface CarAdvertisementService extends GenericService<CarAdvertisement> {
-    public CarAdvertisementResponse createCarAdvertisement(CarAdvertisementDTOAdd carAdvertisementDTOAdd)
-            throws ValidationException, IOException, ResourceNotFoundException, PrivacyViolationException;
+    public String createCarAdvertisement(CarAdvertisementDTOAdd carAdvertisementDTOAdd)
+            throws ValidationException, IOException, ResourceNotFoundException, PrivacyViolationException, NotCorrectAd;
 
-    public CarAdvertisementResponse updateCarAdvertisement(CarAdvertisementDTOAdd carAdvertisementDTOAdd, long id)
+    public void confirmCarAdvertisement(KafkaCarAdDTO kafkaCarAdDTO) throws ResourceNotFoundException;
+
+    public String updateCarAdvertisement(CarAdvertisementDTOAdd carAdvertisementDTOAdd, long id)
             throws ValidationException, ResourceNotFoundException, PrivacyViolationException;
 
     public CarAdvertisementResponse findAdvertisement(long advertisementId, Currency currency)

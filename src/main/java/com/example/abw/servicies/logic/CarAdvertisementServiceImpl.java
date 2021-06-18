@@ -1,12 +1,15 @@
 package com.example.abw.servicies.logic;
 
+import com.example.abw.AppProperties;
 import com.example.abw.entities.advertisement.CarAdvertisement;
-import com.example.abw.entities.advertisement.image.car.CarImage;
+import com.example.abw.exception.ad.NotCorrectAd;
 import com.example.abw.exception.security.PrivacyViolationException;
+import com.example.abw.kafka.car_ad.CarAdProducer;
 import com.example.abw.model.advertisement.Status;
 import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementMapper;
 import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementResponse;
 import com.example.abw.model.currency.Currency;
+import com.example.abw.model.kafka.KafkaCarAdDTO;
 import com.example.abw.model.pageable.PageableParams;
 import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementDTOAdd;
 import com.example.abw.entities.sell_item.car.CarBrand;
@@ -15,17 +18,14 @@ import com.example.abw.repositories.advertisement.CarAdvertisementRepository;
 import com.example.abw.repositories.pagination.advertisement.car_advertisement.CarAdvertisementPaginationRepository;
 import com.example.abw.security.CustomUserDetails;
 import com.example.abw.security.utils.UserUtil;
-import com.example.abw.servicies.CarAdvertisementService;
-import com.example.abw.servicies.CarBrandService;
-import com.example.abw.servicies.CurrencyExchangeService;
-import com.example.abw.servicies.UserService;
+import com.example.abw.servicies.*;
 import com.example.abw.exception.entities.ResourceNotFoundException;
+import com.example.abw.utils.message.MessageTextUtil;
 import com.example.abw.utils.pageable.PageableUtil;
 import com.example.abw.exception.validation.ValidationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.IOException;
@@ -42,12 +42,17 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
     private final UserUtil userUtil;
     private final CurrencyExchangeService currencyExchangeService;
     private final CarAdvertisementMapper carAdvertisementMapper;
+    private final CarImageService carImageService;
+    private final CarAdProducer carAdProducer;
+    private final MessageService messageService;
+    private final AppProperties appProperties;
 
     public CarAdvertisementServiceImpl(CarAdvertisementRepository carAdvertisementRepository, UserService userServiceImpl,
                                        CarBrandService carBrandServiceImpl,
                                        CarAdvertisementPaginationRepository carAdvertisementPaginationRepository,
                                        UserUtil userUtil, CurrencyExchangeService currencyExchangeService,
-                                       CarAdvertisementMapper carAdvertisementMapper
+                                       CarAdvertisementMapper carAdvertisementMapper, CarImageService carImageServiceImpl,
+                                       CarAdProducer carAdProducer, MessageService messageService, AppProperties appProperties
     ) {
         super(carAdvertisementRepository, CarAdvertisement.class);
         this.carAdvertisementRepository = carAdvertisementRepository;
@@ -57,15 +62,18 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
         this.userUtil = userUtil;
         this.currencyExchangeService = currencyExchangeService;
         this.carAdvertisementMapper = carAdvertisementMapper;
+        this.carImageService = carImageServiceImpl;
+        this.carAdProducer = carAdProducer;
+        this.messageService = messageService;
+        this.appProperties = appProperties;
     }
 
     @Override
-    public CarAdvertisementResponse createCarAdvertisement(CarAdvertisementDTOAdd carAdvertisementDTOAdd)
-            throws ValidationException, IOException, ResourceNotFoundException {
+    public String createCarAdvertisement(CarAdvertisementDTOAdd carAdvertisementDTOAdd)
+            throws ValidationException, IOException, ResourceNotFoundException, NotCorrectAd, PrivacyViolationException {
         CustomUserDetails customUserDetails = userUtil.getCustomUserDetails();
         User user = userServiceImpl.findByEmail(customUserDetails.getUsername());
         if (user != null) {
-            Set<CarImage> carImages = new HashSet<>();
             CarAdvertisement carAd = new CarAdvertisement();
             Date date = new Date();
             Timestamp timestamp = new Timestamp(date.getTime());
@@ -76,25 +84,36 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
             carAd.setPrice(carAdvertisementDTOAdd.getPrice());
             carAd.setPriceCurrency(carAdvertisementDTOAdd.getCurrency());
             carAd.setUser(user);
-            carAd.setStatus(Status.ACTIVE);
+            carAd.setStatus(Status.ON_CHECK);
             carAd = create(carAd);
-            for (MultipartFile multipartImage : carAdvertisementDTOAdd.getImages()) {
-                if (multipartImage != null) {
-                    CarImage carImage = new CarImage();
-                    carImage.setContentImage(multipartImage.getBytes());
-                    carImage.setCarAd(carAd);
-                    carImages.add(carImage);
-                }
-            }
-            carAd.setCarImages(carImages);
-            return carAdvertisementMapper.carAdvertisementToCarAdvertisementResponse(create(carAd));
+            carAdProducer.sendCarAd(carAd);
+            carImageService.createCarAdImages(carAdvertisementDTOAdd.getImages(), carAd.getId());
+            return MessageTextUtil.getCarAdOnCheckMessageText(carAd);
         }
         throw new ResourceNotFoundException("user not found");
     }
 
     @Transactional
     @Override
-    public CarAdvertisementResponse updateCarAdvertisement(CarAdvertisementDTOAdd carAdvertisementDTOAdd, long id)
+    public void confirmCarAdvertisement(KafkaCarAdDTO kafkaCarAdDTO) throws ResourceNotFoundException {
+        CarAdvertisement carAdvertisement = findById(kafkaCarAdDTO.getId());
+        if (kafkaCarAdDTO.isCorrect()) {
+            carAdvertisement.setStatus(Status.ACTIVE);
+            messageService.sendMessage(carAdvertisement.getUser().getEmail(),
+                    MessageTextUtil.getCarAdValidMessageText(carAdvertisement),
+                    appProperties.getCarAdvertisementSubject());
+        } else {
+            carAdvertisement.setStatus(Status.NOT_VALID);
+            messageService.sendMessage(carAdvertisement.getUser().getEmail(),
+                    MessageTextUtil.getCarAdNotValidMessageText(carAdvertisement, kafkaCarAdDTO.getErrorMessage()),
+                    appProperties.getCarAdvertisementSubject());
+        }
+        carAdvertisementRepository.save(carAdvertisement);
+    }
+
+    @Transactional
+    @Override
+    public String updateCarAdvertisement(CarAdvertisementDTOAdd carAdvertisementDTOAdd, long id)
             throws ValidationException, ResourceNotFoundException, PrivacyViolationException {
         CarAdvertisement carAd = findById(id);
         if (userUtil.getCustomUserDetails().getUsername().equals(carAd.getUser().getEmail())) {
@@ -103,8 +122,10 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
             carAd.setDescriptions(carAdvertisementDTOAdd.getDescriptions());
             carAd.setPrice(carAdvertisementDTOAdd.getPrice());
             carAd.setPriceCurrency(carAdvertisementDTOAdd.getCurrency());
+            carAd.setStatus(Status.ON_CHECK);
             update(carAd, id);
-            return carAdvertisementMapper.carAdvertisementToCarAdvertisementResponse(findById(id));
+            carAdProducer.sendCarAd(carAd);
+            return MessageTextUtil.getCarAdOnCheckMessageText(carAd);
         }
         throw new PrivacyViolationException("privacy violation");
 

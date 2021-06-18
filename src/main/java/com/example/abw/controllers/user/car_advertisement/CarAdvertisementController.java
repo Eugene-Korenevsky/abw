@@ -1,5 +1,6 @@
 package com.example.abw.controllers.user.car_advertisement;
 
+import com.example.abw.exception.ad.NotCorrectAd;
 import com.example.abw.exception.security.PrivacyViolationException;
 import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementDTOAdd;
 import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementResponse;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -28,22 +30,22 @@ public class CarAdvertisementController {
     }
 
     @GetMapping()
-    public ResponseEntity<?> getAllByUser(PageableParams pageableParams) throws ResourceNotFoundException,ValidationException {
-        return new ResponseEntity<>(carAdvertisementService.findAllByUser(pageableParams),HttpStatus.OK);
+    public ResponseEntity<?> getAllByUser(PageableParams pageableParams) throws ResourceNotFoundException, ValidationException {
+        return new ResponseEntity<>(carAdvertisementService.findAllByUser(pageableParams), HttpStatus.OK);
     }
 
     @GetMapping("/refresh/{id}")
     public ResponseEntity<?> refreshCarAdvertisement(@PathVariable("id") long id)
             throws ResourceNotFoundException, PrivacyViolationException {
-        return new ResponseEntity<>(carAdvertisementService.refreshCarAdvertisement(id),HttpStatus.OK);
+        return new ResponseEntity<>(carAdvertisementService.refreshCarAdvertisement(id), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateAd(@RequestBody CarAdvertisementDTOAdd carAdvertisementDTOAdd,
                                       @PathVariable("id") long id) throws ResourceNotFoundException,
             ValidationException, PrivacyViolationException {
-        CarAdvertisementResponse carAd = carAdvertisementService.updateCarAdvertisement(carAdvertisementDTOAdd, id);
-        return new ResponseEntity<>(carAd, HttpStatus.OK);
+        String response = carAdvertisementService.updateCarAdvertisement(carAdvertisementDTOAdd, id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -55,8 +57,8 @@ public class CarAdvertisementController {
 
     @PostMapping
     public ResponseEntity<?> createAd(@RequestBody CarAdvertisementDTOAdd carAdvertisementDTOAdd)
-            throws ValidationException, IOException, ResourceNotFoundException, PrivacyViolationException {
-        CarAdvertisementResponse carAdvertisement = carAdvertisementService.createCarAdvertisement(carAdvertisementDTOAdd);
-        return new ResponseEntity<>(carAdvertisement, HttpStatus.OK);
+            throws ValidationException, IOException, ResourceNotFoundException, PrivacyViolationException, NotCorrectAd {
+        String response = carAdvertisementService.createCarAdvertisement(carAdvertisementDTOAdd);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

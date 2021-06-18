@@ -1,20 +1,21 @@
 package com.example.abw.servicies.car_advertisiment;
 
+import com.example.abw.AppProperties;
 import com.example.abw.entities.advertisement.CarAdvertisement;
 import com.example.abw.entities.user.User;
 import com.example.abw.exception.entities.ResourceNotFoundException;
 import com.example.abw.exception.security.PrivacyViolationException;
 import com.example.abw.exception.validation.ValidationException;
+import com.example.abw.kafka.car_ad.CarAdProducer;
 import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementMapper;
 import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementMapperImpl;
+import com.example.abw.model.kafka.KafkaCarAdMapper;
+import com.example.abw.model.kafka.KafkaCarAdMapperImpl;
 import com.example.abw.repositories.advertisement.CarAdvertisementRepository;
 import com.example.abw.repositories.pagination.advertisement.car_advertisement.CarAdvertisementPaginationRepository;
 import com.example.abw.security.CustomUserDetails;
 import com.example.abw.security.utils.UserUtil;
-import com.example.abw.servicies.CarAdvertisementService;
-import com.example.abw.servicies.CarBrandService;
-import com.example.abw.servicies.CurrencyExchangeService;
-import com.example.abw.servicies.UserService;
+import com.example.abw.servicies.*;
 import com.example.abw.servicies.logic.CarAdvertisementServiceImpl;
 import org.junit.After;
 import org.junit.Assert;
@@ -44,7 +45,16 @@ public class CarAdvertisementServiceTest {
     @Mock
     CurrencyExchangeService currencyExchangeServiceImpl;
     @Mock
+    CarImageService carImageServiceImpl;
+    @Mock
+    CarAdProducer carAdProducer;
+    @Mock
+    MessageService messageService;
+
     CarAdvertisementMapper carAdvertisementMapper = new CarAdvertisementMapperImpl();
+
+    KafkaCarAdMapper carAdMapper = new KafkaCarAdMapperImpl();
+
 
     private CarAdvertisementService carAdvertisementService;
 
@@ -53,10 +63,12 @@ public class CarAdvertisementServiceTest {
 
     @Before
     public void init() {
+        AppProperties appProperties = new AppProperties();
         closeable = MockitoAnnotations.openMocks(this);
         carAdvertisementService = new CarAdvertisementServiceImpl(carAdvertisementRepository,
                 userServiceImpl, carBrandServiceImpl, carAdvertisementPaginationRepository, userUtil,
-                currencyExchangeServiceImpl, carAdvertisementMapper);
+                currencyExchangeServiceImpl, carAdvertisementMapper, carImageServiceImpl, carAdProducer,
+                messageService, appProperties);
     }
 
     @After
@@ -78,9 +90,9 @@ public class CarAdvertisementServiceTest {
         Mockito.when(userUtil.getCustomUserDetails()).thenReturn(customUserDetails);
         carAdvertisementService.softDelete(1L);
         Mockito.verify(carAdvertisementRepository, Mockito.atLeastOnce()).save(Mockito.any());
-        Mockito.verify(carAdvertisementRepository,Mockito.times(1)).findById(1L);
-        Mockito.verify(customUserDetails,Mockito.times(2)).getUsername();
-        Mockito.verify(userUtil,Mockito.times(2)).getCustomUserDetails();
+        Mockito.verify(carAdvertisementRepository, Mockito.times(1)).findById(1L);
+        Mockito.verify(customUserDetails, Mockito.times(2)).getUsername();
+        Mockito.verify(userUtil, Mockito.times(2)).getCustomUserDetails();
     }
 
     @Test

@@ -44,7 +44,7 @@ public class ActiveCarAdvertisements {
             carAdvertisement.setStatus(Status.EXPIRED);
             carAdvertisement.setEndPublicationDate(new Timestamp(date.getTime()));
             messageService.sendMessage(carAdvertisement.getUser().getEmail(),
-                    MessageTextUtil.getCarAdvertisementMessageText(carAdvertisement),
+                    MessageTextUtil.getCarAdvertisementExpiredMessageText(carAdvertisement),
                     appProperties.getCarAdvertisementSubject());
         }
         carAdvertisementRepository.saveAll(carAdvertisements);
