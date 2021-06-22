@@ -1,6 +1,5 @@
 package com.example.abw.controllers.user.car_advertisement;
 
-import com.example.abw.exception.ad.NotCorrectAd;
 import com.example.abw.exception.security.PrivacyViolationException;
 import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementDTOAdd;
 import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementResponse;
@@ -57,7 +56,7 @@ public class CarAdvertisementController {
 
     @PostMapping
     public ResponseEntity<?> createAd(@RequestBody CarAdvertisementDTOAdd carAdvertisementDTOAdd)
-            throws ValidationException, IOException, ResourceNotFoundException, PrivacyViolationException, NotCorrectAd {
+            throws ValidationException, IOException, ResourceNotFoundException, PrivacyViolationException {
         String response = carAdvertisementService.createCarAdvertisement(carAdvertisementDTOAdd);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

@@ -2,7 +2,7 @@ package com.example.abw.controllers.image;
 
 import com.example.abw.entities.advertisement.image.Image;
 import com.example.abw.exception.entities.ResourceNotFoundException;
-import com.example.abw.repositories.advertisement.image.car.CarImageRepository;
+import com.example.abw.repositories.advertisement.CarImageRepository;
 import com.example.abw.servicies.CarImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;

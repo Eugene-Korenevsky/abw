@@ -8,17 +8,14 @@ import com.example.abw.exception.entities.ResourceNotFoundException;
 import com.example.abw.exception.security.PrivacyViolationException;
 import com.example.abw.exception.validation.ValidationException;
 import com.example.abw.repositories.advertisement.CarAdvertisementRepository;
-import com.example.abw.repositories.advertisement.image.car.CarImageRepository;
+import com.example.abw.repositories.advertisement.CarImageRepository;
 import com.example.abw.security.utils.UserUtil;
-import com.example.abw.servicies.CarAdvertisementService;
 import com.example.abw.servicies.CarImageService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.lang.module.ResolutionException;
 import java.util.*;
 
 @Service

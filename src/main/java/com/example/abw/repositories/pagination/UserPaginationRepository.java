@@ -1,4 +1,4 @@
-package com.example.abw.repositories.pagination.user;
+package com.example.abw.repositories.pagination;
 
 
 import com.example.abw.entities.user.User;

@@ -4,7 +4,7 @@ import com.example.abw.AppProperties;
 import com.example.abw.client.CryptoCompareClient;
 import com.example.abw.model.currency.Currency;
 import com.example.abw.servicies.CurrencyExchangeService;
-import com.example.abw.utils.currency.CurrencyUtil;
+import com.example.abw.utils.CurrencyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -35,8 +35,8 @@ public class CurrencyExchangeUpdater {
     public void updateCurrencyExchange() {
         EnumSet<Currency> currencies = EnumSet.allOf(Currency.class);
         for (Currency currency : currencies) {
-            Map<String, Double> jsonResource = cryptoCompareClient.getCurrencyExchanges(currency);
-            currencyExchangeService.updateCurrencyExchanges(jsonResource, currency);
+           // Map<String, Double> jsonResource = cryptoCompareClient.getCurrencyExchanges(currency);
+           // currencyExchangeService.updateCurrencyExchanges(jsonResource, currency);
         }
     }
 }

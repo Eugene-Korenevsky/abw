@@ -3,7 +3,7 @@ package com.example.abw.client;
 import com.example.abw.AppProperties;
 import com.example.abw.exception.client.CryptoCompareClientResponseErrorHandling;
 import com.example.abw.model.currency.Currency;
-import com.example.abw.utils.currency.CurrencyUtil;
+import com.example.abw.utils.CurrencyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;

@@ -2,7 +2,6 @@ package com.example.abw.servicies;
 
 
 import com.example.abw.entities.advertisement.CarAdvertisement;
-import com.example.abw.exception.ad.NotCorrectAd;
 import com.example.abw.exception.security.PrivacyViolationException;
 import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementResponse;
 import com.example.abw.model.currency.Currency;
@@ -17,7 +16,7 @@ import java.util.List;
 
 public interface CarAdvertisementService extends GenericService<CarAdvertisement> {
     public String createCarAdvertisement(CarAdvertisementDTOAdd carAdvertisementDTOAdd)
-            throws ValidationException, IOException, ResourceNotFoundException, PrivacyViolationException, NotCorrectAd;
+            throws ValidationException, IOException, ResourceNotFoundException, PrivacyViolationException;
 
     public void confirmCarAdvertisement(KafkaCarAdDTO kafkaCarAdDTO) throws ResourceNotFoundException;
 

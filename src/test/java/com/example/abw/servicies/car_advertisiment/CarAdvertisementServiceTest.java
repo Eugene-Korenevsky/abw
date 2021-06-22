@@ -6,13 +6,13 @@ import com.example.abw.entities.user.User;
 import com.example.abw.exception.entities.ResourceNotFoundException;
 import com.example.abw.exception.security.PrivacyViolationException;
 import com.example.abw.exception.validation.ValidationException;
-import com.example.abw.kafka.car_ad.CarAdProducer;
+import com.example.abw.kafka.KafkaProducers;
 import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementMapper;
 import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementMapperImpl;
 import com.example.abw.model.kafka.KafkaCarAdMapper;
 import com.example.abw.model.kafka.KafkaCarAdMapperImpl;
 import com.example.abw.repositories.advertisement.CarAdvertisementRepository;
-import com.example.abw.repositories.pagination.advertisement.car_advertisement.CarAdvertisementPaginationRepository;
+import com.example.abw.repositories.pagination.CarAdvertisementPaginationRepository;
 import com.example.abw.security.CustomUserDetails;
 import com.example.abw.security.utils.UserUtil;
 import com.example.abw.servicies.*;
@@ -47,7 +47,7 @@ public class CarAdvertisementServiceTest {
     @Mock
     CarImageService carImageServiceImpl;
     @Mock
-    CarAdProducer carAdProducer;
+    KafkaProducers kafkaProducers;
     @Mock
     MessageService messageService;
 
@@ -67,7 +67,7 @@ public class CarAdvertisementServiceTest {
         closeable = MockitoAnnotations.openMocks(this);
         carAdvertisementService = new CarAdvertisementServiceImpl(carAdvertisementRepository,
                 userServiceImpl, carBrandServiceImpl, carAdvertisementPaginationRepository, userUtil,
-                currencyExchangeServiceImpl, carAdvertisementMapper, carImageServiceImpl, carAdProducer,
+                currencyExchangeServiceImpl, carAdvertisementMapper, carImageServiceImpl, kafkaProducers,
                 messageService, appProperties);
     }
 

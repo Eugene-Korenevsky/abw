@@ -6,7 +6,7 @@ import com.example.abw.model.advertisement.Status;
 import com.example.abw.repositories.advertisement.CarAdvertisementRepository;
 import com.example.abw.servicies.CarAdvertisementService;
 import com.example.abw.servicies.MessageService;
-import com.example.abw.utils.message.MessageTextUtil;
+import com.example.abw.utils.MessageTextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
