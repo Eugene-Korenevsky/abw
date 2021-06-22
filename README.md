@@ -1,2 +1,2 @@
 # abw
-here I use simple kafka consumer. If you want to see producer for this app please follow the link https://github.com/Eugene-Korenevsky/simple-kafka/tree/main/abw-kafka-producer 
+here I use kafka. If you want to see server for this app please follow the link https://github.com/Eugene-Korenevsky/simple-kafka/tree/main/abw-kafka-producer 
