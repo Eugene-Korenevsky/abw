@@ -25,8 +25,6 @@ public class KafkaListeners {
     @Autowired
     private CurrencyExchangeService currencyExchangeService;
 
-    private final CountDownLatch countDownLatch = new CountDownLatch(1);
-
     @KafkaListener(topics = "car_ad-result", groupId = "car_adGroup",
             containerFactory = "kafkaJsonListenerContainerFactory")
     public void carAdResultListening(KafkaCarAdDTO kafkaCarAdDTO) throws ResourceNotFoundException {
@@ -37,6 +35,5 @@ public class KafkaListeners {
             containerFactory = "kafkaJsonListenerContainerFactory")
     public void currencyExchangeListening(CurrencyExchangeDTO currencyExchange) {
         currencyExchangeService.updateCurrencyExchange(currencyExchange);
-        this.countDownLatch.countDown();
     }
 }

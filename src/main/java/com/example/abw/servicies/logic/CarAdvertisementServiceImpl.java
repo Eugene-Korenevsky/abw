@@ -9,6 +9,7 @@ import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementMap
 import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementResponse;
 import com.example.abw.model.currency.Currency;
 import com.example.abw.model.kafka.KafkaCarAdDTO;
+import com.example.abw.model.kafka.KafkaCarAdMapper;
 import com.example.abw.model.pageable.PageableParams;
 import com.example.abw.model.advertisement.car_advertisement.CarAdvertisementDTOAdd;
 import com.example.abw.entities.sell_item.car.CarBrand;
@@ -22,6 +23,8 @@ import com.example.abw.exception.entities.ResourceNotFoundException;
 import com.example.abw.utils.MessageTextUtil;
 import com.example.abw.utils.PageableUtil;
 import com.example.abw.exception.validation.ValidationException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +35,7 @@ import java.sql.Timestamp;
 import java.util.*;
 
 @Service
+@PropertySource("classpath:kafka.properties")
 public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertisement> implements CarAdvertisementService {
 
     private final CarAdvertisementRepository carAdvertisementRepository;
@@ -45,13 +49,19 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
     private final KafkaProducers kafkaProducers;
     private final MessageService messageService;
     private final AppProperties appProperties;
+    private final KafkaCarAdMapper kafkaCarAdMapper;
+
+    @Value("${car.ad.topic}")
+    private String carAdTopic;
+
 
     public CarAdvertisementServiceImpl(CarAdvertisementRepository carAdvertisementRepository, UserService userServiceImpl,
                                        CarBrandService carBrandServiceImpl,
                                        CarAdvertisementPaginationRepository carAdvertisementPaginationRepository,
                                        UserUtil userUtil, CurrencyExchangeService currencyExchangeService,
                                        CarAdvertisementMapper carAdvertisementMapper, CarImageService carImageServiceImpl,
-                                       KafkaProducers kafkaProducers, MessageService messageService, AppProperties appProperties
+                                       KafkaProducers kafkaProducers, MessageService messageService, AppProperties appProperties,
+                                       KafkaCarAdMapper kafkaCarAdMapper
     ) {
         super(carAdvertisementRepository, CarAdvertisement.class);
         this.carAdvertisementRepository = carAdvertisementRepository;
@@ -65,6 +75,7 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
         this.kafkaProducers = kafkaProducers;
         this.messageService = messageService;
         this.appProperties = appProperties;
+        this.kafkaCarAdMapper = kafkaCarAdMapper;
     }
 
     @Override
@@ -85,7 +96,8 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
             carAd.setUser(user);
             carAd.setStatus(Status.ON_CHECK);
             carAd = create(carAd);
-            kafkaProducers.sendCarAd(carAd);
+            KafkaCarAdDTO kafkaCarAdDTO = kafkaCarAdMapper.carAdvertisementToKafkaCarAdDTO(carAd);
+            kafkaProducers.send(kafkaCarAdDTO,carAdTopic);
             carImageService.createCarAdImages(carAdvertisementDTOAdd.getImages(), carAd.getId());
             return MessageTextUtil.getCarAdOnCheckMessageText(carAd);
         }
@@ -123,7 +135,8 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
             carAd.setPriceCurrency(carAdvertisementDTOAdd.getCurrency());
             carAd.setStatus(Status.ON_CHECK);
             update(carAd, id);
-            kafkaProducers.sendCarAd(carAd);
+            KafkaCarAdDTO kafkaCarAdDTO = kafkaCarAdMapper.carAdvertisementToKafkaCarAdDTO(carAd);
+            kafkaProducers.send(kafkaCarAdDTO,carAdTopic);
             return MessageTextUtil.getCarAdOnCheckMessageText(carAd);
         }
         throw new PrivacyViolationException("privacy violation");

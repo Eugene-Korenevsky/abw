@@ -53,6 +53,8 @@ public class CarAdvertisementServiceTest {
 
     CarAdvertisementMapper carAdvertisementMapper = new CarAdvertisementMapperImpl();
 
+    KafkaCarAdMapper kafkaCarAdMapper = new KafkaCarAdMapperImpl();
+
     KafkaCarAdMapper carAdMapper = new KafkaCarAdMapperImpl();
 
 
@@ -68,7 +70,7 @@ public class CarAdvertisementServiceTest {
         carAdvertisementService = new CarAdvertisementServiceImpl(carAdvertisementRepository,
                 userServiceImpl, carBrandServiceImpl, carAdvertisementPaginationRepository, userUtil,
                 currencyExchangeServiceImpl, carAdvertisementMapper, carImageServiceImpl, kafkaProducers,
-                messageService, appProperties);
+                messageService, appProperties, kafkaCarAdMapper);
     }
 
     @After

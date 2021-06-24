@@ -35,8 +35,8 @@ public class CurrencyExchangeUpdater {
     public void updateCurrencyExchange() {
         EnumSet<Currency> currencies = EnumSet.allOf(Currency.class);
         for (Currency currency : currencies) {
-            Map<String, Double> jsonResource = cryptoCompareClient.getCurrencyExchanges(currency);
-            currencyExchangeService.updateCurrencyExchanges(jsonResource, currency);
+           // Map<String, Double> jsonResource = cryptoCompareClient.getCurrencyExchanges(currency);
+            //currencyExchangeService.updateCurrencyExchanges(jsonResource, currency);
         }
     }
 }
