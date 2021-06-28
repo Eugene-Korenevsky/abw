@@ -20,6 +20,8 @@ public interface CarAdvertisementService extends GenericService<CarAdvertisement
 
     public void confirmCarAdvertisement(KafkaCarAdDTO kafkaCarAdDTO) throws ResourceNotFoundException;
 
+    public void errorKafkaCarAdvertisement(KafkaCarAdDTO kafkaCarAdDTO) throws ResourceNotFoundException;
+
     public String updateCarAdvertisement(CarAdvertisementDTOAdd carAdvertisementDTOAdd, long id)
             throws ValidationException, ResourceNotFoundException, PrivacyViolationException;
 

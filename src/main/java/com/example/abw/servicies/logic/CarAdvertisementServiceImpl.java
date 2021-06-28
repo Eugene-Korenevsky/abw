@@ -97,7 +97,7 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
             carAd.setStatus(Status.ON_CHECK);
             carAd = create(carAd);
             KafkaCarAdDTO kafkaCarAdDTO = kafkaCarAdMapper.carAdvertisementToKafkaCarAdDTO(carAd);
-            kafkaProducers.send(kafkaCarAdDTO,carAdTopic);
+            kafkaProducers.send(kafkaCarAdDTO, carAdTopic);
             carImageService.createCarAdImages(carAdvertisementDTOAdd.getImages(), carAd.getId());
             return MessageTextUtil.getCarAdOnCheckMessageText(carAd);
         }
@@ -122,6 +122,13 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
         carAdvertisementRepository.save(carAdvertisement);
     }
 
+    @Override
+    public void errorKafkaCarAdvertisement(KafkaCarAdDTO kafkaCarAdDTO) throws ResourceNotFoundException {
+        CarAdvertisement carAdvertisement = findById(kafkaCarAdDTO.getId());
+        carAdvertisement.setStatus(Status.ON_ERROR);
+        carAdvertisementRepository.save(carAdvertisement);
+    }
+
     @Transactional
     @Override
     public String updateCarAdvertisement(CarAdvertisementDTOAdd carAdvertisementDTOAdd, long id)
@@ -136,7 +143,8 @@ public class CarAdvertisementServiceImpl extends GenericServiceImpl<CarAdvertise
             carAd.setStatus(Status.ON_CHECK);
             update(carAd, id);
             KafkaCarAdDTO kafkaCarAdDTO = kafkaCarAdMapper.carAdvertisementToKafkaCarAdDTO(carAd);
-            kafkaProducers.send(kafkaCarAdDTO,carAdTopic);
+            kafkaCarAdDTO.setErrorMessage("");
+            kafkaProducers.send(kafkaCarAdDTO, carAdTopic);
             return MessageTextUtil.getCarAdOnCheckMessageText(carAd);
         }
         throw new PrivacyViolationException("privacy violation");
