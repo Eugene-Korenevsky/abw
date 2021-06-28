@@ -5,14 +5,13 @@ import com.example.abw.model.currency.CurrencyExchangeDTO;
 import com.example.abw.model.kafka.KafkaCarAdDTO;
 import com.example.abw.servicies.CarAdvertisementService;
 import com.example.abw.servicies.CurrencyExchangeService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-
-import java.util.concurrent.CountDownLatch;
 
 @Component
 @EnableKafka
@@ -25,6 +24,9 @@ public class KafkaListeners {
     @Autowired
     private CurrencyExchangeService currencyExchangeService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @KafkaListener(topics = "car_ad-result", groupId = "car_adGroup",
             containerFactory = "kafkaJsonListenerContainerFactory")
     public void carAdResultListening(KafkaCarAdDTO kafkaCarAdDTO) throws ResourceNotFoundException {
@@ -35,5 +37,12 @@ public class KafkaListeners {
             containerFactory = "kafkaJsonListenerContainerFactory")
     public void currencyExchangeListening(CurrencyExchangeDTO currencyExchange) {
         currencyExchangeService.updateCurrencyExchange(currencyExchange);
+    }
+
+    @KafkaListener(topics = "car_ad.DLT", groupId = "car_adGroup",
+            containerFactory = "kafkaJsonListenerContainerFactory")
+    public void errorListener(String record) throws JsonProcessingException, ResourceNotFoundException {
+        KafkaCarAdDTO kafkaCarAdDTO = objectMapper.readValue(record, KafkaCarAdDTO.class);
+        carAdvertisementService.errorKafkaCarAdvertisement(kafkaCarAdDTO);
     }
 }
