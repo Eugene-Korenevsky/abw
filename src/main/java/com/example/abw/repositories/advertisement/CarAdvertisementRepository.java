@@ -17,4 +17,6 @@ public interface CarAdvertisementRepository extends CrudRepository<CarAdvertisem
     public List<CarAdvertisement> readAllByStatusAndPublicationDateLessThan(Status status, Timestamp timestamp);
 
     public List<CarAdvertisement> readAllByUser(User user);
+
+    public List<CarAdvertisement> readAllByStatus(Status status);
 }
